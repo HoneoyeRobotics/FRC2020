@@ -7,7 +7,6 @@
 
 package frc.robot;
 
-import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.Joystick;
@@ -17,7 +16,19 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
-
+import frc.robot.commands.Autonomous;
+import frc.robot.commands.CloseClaw;
+import frc.robot.commands.OpenClaw;
+import frc.robot.commands.Pickup;
+import frc.robot.commands.Place;
+import frc.robot.commands.PrepareToPickup;
+import frc.robot.commands.SetElevatorSetpoint;
+import frc.robot.commands.SetWristSetpoint;
+import frc.robot.commands.TankDrive;
+import frc.robot.subsystems.Claw;
+import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Wrist;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -28,26 +39,48 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveTrain m_drivetrain = new DriveTrain();
+  private final Elevator m_elevator = new Elevator();
+  private final Wrist m_wrist = new Wrist();
+  private final Claw m_claw = new Claw();
 
   private final Joystick m_joystick = new Joystick(0);
 
-  // private final CommandBase m_autonomousCommand =
-  //     new Autonomous(m_drivetrain);
+  private final CommandBase m_autonomousCommand =
+      new Autonomous(m_drivetrain, m_claw, m_wrist, m_elevator);
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    
-    m_drivetrain.setDefaultCommand(new DifferentialDrive(() -> m_joystick.getY(Hand.kLeft),
+    // Put Some buttons on the SmartDashboard
+    SmartDashboard.putData("Elevator Bottom", new SetElevatorSetpoint(0, m_elevator));
+    SmartDashboard.putData("Elevator Platform", new SetElevatorSetpoint(0.2, m_elevator));
+    SmartDashboard.putData("Elevator Top", new SetElevatorSetpoint(0.3, m_elevator));
+
+    SmartDashboard.putData("Wrist Horizontal", new SetWristSetpoint(0, m_wrist));
+    SmartDashboard.putData("Raise Wrist", new SetWristSetpoint(-45, m_wrist));
+
+    SmartDashboard.putData("Open Claw", new OpenClaw(m_claw));
+    SmartDashboard.putData("Close Claw", new CloseClaw(m_claw));
+
+    SmartDashboard
+        .putData("Deliver Soda", new Autonomous(m_drivetrain, m_claw, m_wrist, m_elevator));
+
+    // Assign default commands
+    m_drivetrain.setDefaultCommand(new TankDrive(() -> m_joystick.getY(Hand.kLeft),
         () -> m_joystick.getY(Hand.kRight), m_drivetrain));
 
     // Show what command your subsystem is running on the SmartDashboard
     SmartDashboard.putData(m_drivetrain);
+    SmartDashboard.putData(m_elevator);
+    SmartDashboard.putData(m_wrist);
+    SmartDashboard.putData(m_claw);
 
     // Call log method on all subsystems
+    m_wrist.log();
+    m_elevator.log();
     m_drivetrain.log();
-
+    m_claw.log();
 
     // Configure the button bindings
     configureButtonBindings();
@@ -69,6 +102,17 @@ public class RobotContainer {
     final JoystickButton r2 = new JoystickButton(m_joystick, 10);
     final JoystickButton l1 = new JoystickButton(m_joystick, 11);
     final JoystickButton r1 = new JoystickButton(m_joystick, 12);
+
+    // Connect the buttons to commands
+    dpadUp.whenPressed(new SetElevatorSetpoint(0.2, m_elevator));
+    dpadDown.whenPressed(new SetElevatorSetpoint(-0.2, m_elevator));
+    dpadRight.whenPressed(new CloseClaw(m_claw));
+    dpadLeft.whenPressed(new OpenClaw(m_claw));
+
+    r1.whenPressed(new PrepareToPickup(m_claw, m_wrist, m_elevator));
+    r2.whenPressed(new Pickup(m_claw, m_wrist, m_elevator));
+    l1.whenPressed(new Place(m_claw, m_wrist, m_elevator));
+    l2.whenPressed(new Autonomous(m_drivetrain, m_claw, m_wrist, m_elevator));
   }
 
 
@@ -77,7 +121,7 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  // public Command getAutonomousCommand() {
-  //   return m_autonomousCommand;
-  // }
+  public Command getAutonomousCommand() {
+    return m_autonomousCommand;
+  }
 }
