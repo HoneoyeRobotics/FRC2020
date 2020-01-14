@@ -70,12 +70,10 @@ public class RobotContainer {
     final JoystickButton aButton = new JoystickButton(pilotJoystick, 1);
     final JoystickButton bButton = new JoystickButton(pilotJoystick, 2);
     final JoystickButton xButton = new JoystickButton(pilotJoystick, 3);
-    // Connect the buttons to commands
-    aButton.toggleWhenPressed(new RunControlPanelArmWheel(ControlPanel));
-    bButton.toggleWhenPressed(new IncreaseControlPanelArmWheelSpeed(ControlPanel));
-    xButton.toggleWhenPressed(new DecreaseControlPanelArmWheelSpeed(ControlPanel));
-  }
 
+    // Connect the buttons to commands
+    aButton.toggleWhenPressed(new RunControlPanelArmWheel(ControlPanel, () -> bButton.get(), () -> xButton.get()));
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

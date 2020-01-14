@@ -31,16 +31,6 @@ public class ControlPanel extends SubsystemBase {
     m_ControlPanelArmWheel.set(ControlPanelArmWheelSpeed);
   }
 
-  public void increaseWheelSpeed() {
-    ControlPanelArmWheelSpeed = ControlPanelArmWheelSpeed + 0.1;
-    m_ControlPanelArmWheel.set(ControlPanelArmWheelSpeed);
-  }
-
-  public void decreaseWheelSpeed() {
-    ControlPanelArmWheelSpeed = ControlPanelArmWheelSpeed - 0.1;
-    m_ControlPanelArmWheel.set(ControlPanelArmWheelSpeed);
-  }
-
   /**
    * Set the claw motor to move in the close direction.
    */
@@ -51,8 +41,4 @@ public class ControlPanel extends SubsystemBase {
   // public void drive(final double xSpeed) {
   //   m_ControlPanelArmWheel.open();
   // }
-
-public void placeholder() {
-
-}
 }

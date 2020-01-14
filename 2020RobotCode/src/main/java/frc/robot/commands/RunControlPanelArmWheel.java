@@ -7,18 +7,24 @@
 
 package frc.robot.commands;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ControlPanel;
 
 public class RunControlPanelArmWheel extends CommandBase {
-  // private WPI_VictorSPX controlPanelArmWheel;
   private ControlPanel controlPanel;
-  // private Command startRunning;
-  // private Command stopRunning;
-
-  public RunControlPanelArmWheel(ControlPanel ControlPanel) {
+  private double CurrentSpeed = 0.0;
+  private double SpeedModifier = 0.1;
+  private BooleanSupplier IncreaseSpeed;
+  private BooleanSupplier DecreaseSpeed;
+  private boolean IncreasingSpeed = false;
+  private boolean DecreasingSpeed = false;
+  public RunControlPanelArmWheel(ControlPanel ControlPanel, BooleanSupplier IncreaseSpeed, BooleanSupplier DecreaseSpeed) {
     this.controlPanel = ControlPanel;
+    this.IncreaseSpeed = IncreaseSpeed;
+    this.DecreaseSpeed = DecreaseSpeed;
     addRequirements(controlPanel);
   }
 
@@ -26,18 +32,40 @@ public class RunControlPanelArmWheel extends CommandBase {
   @Override
   public void initialize() {
     SmartDashboard.putString("RunWheelStatus", "Initialize");
+    CurrentSpeed = 0.5;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    controlPanel.startRunning();
+    if(IncreaseSpeed.getAsBoolean() == true && IncreasingSpeed == false){
+      CurrentSpeed += SpeedModifier;
+      IncreasingSpeed = true; 
+    }
+    else if (IncreaseSpeed.getAsBoolean() == false && IncreasingSpeed == true)
+      IncreasingSpeed = false;
+
+    if(DecreaseSpeed.getAsBoolean() == true && DecreasingSpeed == false){
+      CurrentSpeed -= SpeedModifier;
+      DecreasingSpeed = true; 
+    }
+    else if (DecreaseSpeed.getAsBoolean() == false && DecreasingSpeed == true)     
+    DecreasingSpeed = false;
+
+    if (CurrentSpeed >= 1.0) {
+      CurrentSpeed = 1.0;
+    }
+    
+    if (CurrentSpeed <= 0.0) {
+      CurrentSpeed = 0;
+    }
+    controlPanel.run(CurrentSpeed);
     SmartDashboard.putString("RunWheelStatus", "Execute");
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean command_ends) {
+  public void end(boolean interrupted) {
     controlPanel.stopRunning();
     SmartDashboard.putString("RunWheelStatus", "End");
   }
