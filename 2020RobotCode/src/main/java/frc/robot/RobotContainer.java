@@ -48,9 +48,11 @@ public class RobotContainer {
   public RobotContainer() {
     m_drivetrain.setDefaultCommand(new ArcadeDrive(() -> driverJoystick.getRawAxis(1) * -1,
         () -> driverJoystick.getRawAxis(2) - driverJoystick.getRawAxis(3), m_drivetrain));
+    ControlPanel.setDefaultCommand(new ControlPanelColorVisionTracking(ControlPanel));
     // Show what command your subsystem is running on the SmartDashboard
     SmartDashboard.putData(m_drivetrain);
-
+    SmartDashboard.putData(ControlPanel);
+    SmartDashboard.putData(new ResetControlPanel(ControlPanel));
     // Call log method on all subsystems
     m_drivetrain.log();
 
