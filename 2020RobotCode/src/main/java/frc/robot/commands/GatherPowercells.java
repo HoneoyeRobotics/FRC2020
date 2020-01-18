@@ -14,11 +14,11 @@ public class GatherPowercells extends CommandBase {
   /**
    * Creates a new GatherPowercells.
    */
-  private final PowercellSystem powercellSystem;
-  public GatherPowercells(PowercellSystem powercellSystem) {
+  private final PowerCellSystem powerCellSystem;
+  public GatherPowercells(PowerCellSystem powerCellSystem) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.powercellSystem = powercellSystem;
-    addRequirements(powercellSystem);
+    this.powerCellSystem = powerCellSystem;
+    addRequirements(powerCellSystem);
   }
 
   // Called when the command is initially scheduled.
