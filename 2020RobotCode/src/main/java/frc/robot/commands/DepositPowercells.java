@@ -11,11 +11,14 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.PowercellSystem;
 
 public class DepositPowercells extends CommandBase {
+  private final PowercellSystem powercellSystem;
   /**
    * Creates a new DepositPowercells.
    */
-  public DepositPowercells() {
+  public DepositPowercells(PowercellSystem powercellSystem) {
     // Use addRequirements() here to declare subsystem dependencies.
+    this.powercellSystem = powercellSystem;
+    addRequirements(powercellSystem);
   }
 
   // Called when the command is initially scheduled.

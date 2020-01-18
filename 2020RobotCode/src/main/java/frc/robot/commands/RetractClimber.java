@@ -14,8 +14,11 @@ public class RetractClimber extends CommandBase {
   /**
    * Creates a new RetractClimber.
    */
-  public RetractClimber() {
+  private final Climber climber;
+  public RetractClimber(Climber climber) {
     // Use addRequirements() here to declare subsystem dependencies.
+    this.climber = climber;
+    addRequirements(climber);
   }
 
   // Called when the command is initially scheduled.

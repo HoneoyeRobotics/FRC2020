@@ -14,8 +14,12 @@ public class ToggleControlPanelArm extends CommandBase {
   /**
    * Creates a new ToggleControlPanelArm.
    */
-  public ToggleControlPanelArm() {
+  private final ControlPanel controlPanel;
+
+  public ToggleControlPanelArm(ControlPanel controlPanel) {
     // Use addRequirements() here to declare subsystem dependencies.
+    this.controlPanel = controlPanel;
+    addRequirements(controlPanel);
   }
 
   // Called when the command is initially scheduled.

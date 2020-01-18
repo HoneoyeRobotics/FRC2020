@@ -14,8 +14,11 @@ public class ElevateClimber extends CommandBase {
   /**
    * Creates a new ElevateClimber.
    */
-  public ElevateClimber() {
+  private final Climber climber;
+  public ElevateClimber(Climber climber) {
     // Use addRequirements() here to declare subsystem dependencies.
+    this.climber = climber;
+    addRequirements(climber);
   }
 
   // Called when the command is initially scheduled.
