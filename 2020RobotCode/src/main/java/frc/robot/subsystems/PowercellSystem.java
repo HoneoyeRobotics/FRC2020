@@ -18,16 +18,8 @@ public class PowercellSystem extends SubsystemBase {
     //bla bla runs the front wheel shaft
   }
 
-  public void RunBottomConveyer() {
+  public void RunConveyer() {
     //bla bla runs bottom conveyer
-  }
-
-  public void RunTopConveyer() {
-    //bla bla runs top conveyer
-  }
-
-  public void RunBackWheel() {
-    //bla bla runs back wheel shaft
   }
 
   public void OpenConveyerHatch() {
@@ -38,15 +30,19 @@ public class PowercellSystem extends SubsystemBase {
     //bla bla closes conveyer hatch
   }
 
-  public void OpenPneumatics() {
-    //bla bla open pneumatic pistons
+  public void HoldConveyerHatch() {
+    //bla bla hold conveyer hatch position
   }
 
-  public void StopPneumatics() {
-    //bla bla hold pneumatic pistons
+  public void RaiseConveyer() {
+    //bla bla raise conveyer pneumatic pistons
   }
 
-  public void ClosePneumatics() {
+  public void HoldConveyer() {
+    //bla bla hold pneumatic pistons position 
+  }
+
+  public void LowerConveyer() {
     //bla bla close pneumatic pistons
   }
 

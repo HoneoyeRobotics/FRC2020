@@ -55,16 +55,12 @@ public class ControlPanel extends SubsystemBase {
     //bla bla moves arm wheel
   }
 
+  /**
+   * this sets the arm wheel's speed
+   * @param speed speed of arm wheel is from -1 to 1
+   */
   public void RunArmWheel(double speed) {
     m_ControlPanelArmWheel.set(speed);
-  }
-
-  public void ExtendArmWheel() {
-    //bla bla extends arm wheel from frame
-  }
-
-  public void RetractArmWheel() {
-    //bla bla retracts arm wheel to frame
   }
 
   public MatchedColor getColor(){
@@ -91,10 +87,19 @@ public class ControlPanel extends SubsystemBase {
     SmartDashboard.putString("COLOR: Guess Color", currentColor.toString());
     
     SmartDashboard.putNumber("COLOR: Confidence", match.confidence);
-    return currentColor;
-    
+    return currentColor; 
   }
   
+  /**
+   * get Current Arm Position
+   * @return current Encoder Position
+   */
+  public int getArmPosition() {
+    return 0;
+  }
+
+  
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
