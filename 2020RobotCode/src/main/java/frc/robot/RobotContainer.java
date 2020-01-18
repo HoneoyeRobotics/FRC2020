@@ -31,8 +31,11 @@ import frc.robot.subsystems.*;
  * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  private static final ControlPanel ControlPanel = new ControlPanel();
-  private final DriveTrain m_drivetrain = new DriveTrain();
+  private final ControlPanel controlPanel;
+  private final DriveTrain drivetrain;
+  private final Climber climber;
+  private final PowerCellSystem powerCellSystem;
+  private final int PCM_CANID = 10;
   // The robot's subsystems and commands are defined here...
   // private final ControlPanel m_ControlPanel = new Subsystem();
   private final Joystick driverJoystick = new Joystick(0);
@@ -40,22 +43,29 @@ public class RobotContainer {
   // private final JoystickButton m_RunControlPanelArmWheel = new
   // JoystickButton(pilotJoystick, 0); // button A, check button id
   // private final Autonomous m_autonomousCommand = new Autonomous();
-  private final ArcadeDrive m_autoCommand = new ArcadeDrive(null, null, m_drivetrain);
+  private final ArcadeDrive m_autoCommand;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    m_drivetrain.setDefaultCommand(new ArcadeDrive(() -> driverJoystick.getRawAxis(1) * -1,
-        () -> driverJoystick.getRawAxis(2) - driverJoystick.getRawAxis(3), m_drivetrain));
-    ControlPanel.setDefaultCommand(new ControlPanelColorVisionTracking(ControlPanel));
-    // Show what command your subsystem is running on the SmartDashboard
-    SmartDashboard.putData(m_drivetrain);
-    SmartDashboard.putData(ControlPanel);
-    SmartDashboard.putData(new ResetControlPanel(ControlPanel));
-    // Call log method on all subsystems
-    m_drivetrain.log();
 
+    // construct subsystems
+    drivetrain = new DriveTrain();
+    climber = new Climber(PCM_CANID);
+    controlPanel = new ControlPanel();
+    powerCellSystem = new PowerCellSystem(PCM_CANID);
+
+    drivetrain.setDefaultCommand(new ArcadeDrive(() -> driverJoystick.getRawAxis(1) * -1,
+        () -> driverJoystick.getRawAxis(2) - driverJoystick.getRawAxis(3), drivetrain));
+    controlPanel.setDefaultCommand(new ControlPanelColorVisionTracking(controlPanel));
+    // Show what command your subsystem is running on the SmartDashboard
+    SmartDashboard.putData(drivetrain);
+    SmartDashboard.putData(controlPanel);
+    SmartDashboard.putData(new ResetControlPanel(controlPanel));
+    // Call log method on all subsystems
+    drivetrain.log();
+    m_autoCommand = new ArcadeDrive(null, null, drivetrain);
     // Configure the button bindings
     configureButtonBindings();
 
@@ -74,7 +84,7 @@ public class RobotContainer {
     final JoystickButton xButton = new JoystickButton(pilotJoystick, 3);
 
     // Connect the buttons to commands
-    aButton.toggleWhenPressed(new RunControlPanelArmWheel(ControlPanel, () -> bButton.get(), () -> xButton.get()));
+    aButton.toggleWhenPressed(new RunControlPanelArmWheel(controlPanel, () -> bButton.get(), () -> xButton.get()));
   }
 
   /**

@@ -7,11 +7,23 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class PowercellSystem extends SubsystemBase {
-  public PowercellSystem() {
+public class PowerCellSystem extends SubsystemBase {
+
+  private final int PCMID;  
+  private final Compressor compressor;
+  private final DoubleSolenoid  conveyorSolenoid;
+  private final DoubleSolenoid  rearHatchSolenoid;
+  public PowerCellSystem(int PCMID) {
     //initialize all motors here
+    conveyorSolenoid = new DoubleSolenoid (PCMID, 0,1);
+    rearHatchSolenoid = new DoubleSolenoid (PCMID, 2,3);
+    this.PCMID = PCMID;
+    compressor = new Compressor(PCMID);
+    compressor.setClosedLoopControl(true);
   }
 
   public void RunFrontWheel() {
