@@ -82,9 +82,13 @@ public class RobotContainer {
     final JoystickButton aButton = new JoystickButton(pilotJoystick, 1);
     final JoystickButton bButton = new JoystickButton(pilotJoystick, 2);
     final JoystickButton xButton = new JoystickButton(pilotJoystick, 3);
+    final JoystickButton leftBumper = new JoystickButton(pilotJoystick, 5);
+    final JoystickButton rightBumper = new JoystickButton(pilotJoystick, 6);
 
     // Connect the buttons to commands
     aButton.toggleWhenPressed(new RunControlPanelArmWheel(controlPanel, () -> bButton.get(), () -> xButton.get()));
+    leftBumper.whileHeld(new ElevateClimber(climber));
+    rightBumper.whileHeld(new RetractClimber(climber));
   }
 
   /**

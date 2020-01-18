@@ -7,55 +7,61 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class PowerCellSystem extends SubsystemBase {
-
   private final int PCMID;  
   private final Compressor compressor;
-  private final DoubleSolenoid  conveyorSolenoid;
-  private final DoubleSolenoid  rearHatchSolenoid;
+  private final DoubleSolenoid conveyorSolenoid;
+  private final DoubleSolenoid rearHatchSolenoid;
+  //private final VictorSfinal final PX m_ConveyerMotor;
+  private final WPI_VictorSPX frontWheelMotor = new WPI_VictorSPX(10); 
+  private final WPI_VictorSPX conveyerMotor = new WPI_VictorSPX(11);
+  
   public PowerCellSystem(int PCMID) {
-    //initialize all motors here
-    conveyorSolenoid = new DoubleSolenoid (PCMID, 0,1);
+    //initializes compressor here
+    conveyorSolenoid = new DoubleSolenoid (PCMID, 4,5);
     rearHatchSolenoid = new DoubleSolenoid (PCMID, 2,3);
     this.PCMID = PCMID;
     compressor = new Compressor(PCMID);
     compressor.setClosedLoopControl(true);
   }
 
-  public void RunFrontWheel() {
-    //bla bla runs the front wheel shaft
+  public void RunFrontWheel(double speed) {
+    frontWheelMotor.set(speed);
   }
 
-  public void RunConveyer() {
-    //bla bla runs bottom conveyer
+  public void RunConveyer(double speed) {
+    conveyerMotor.set(speed);
   }
 
   public void OpenConveyerHatch() {
-    //bla bla opens conveyer hatch
+    rearHatchSolenoid.set(Value.kForward);
   }
 
   public void CloseConveyerHatch() {
-    //bla bla closes conveyer hatch
+    rearHatchSolenoid.set(Value.kReverse);
   }
 
   public void HoldConveyerHatch() {
-    //bla bla hold conveyer hatch position
+    rearHatchSolenoid.set(Value.kOff);
   }
 
   public void RaiseConveyer() {
-    //bla bla raise conveyer pneumatic pistons
+    conveyorSolenoid.set(Value.kForward);
   }
 
   public void HoldConveyer() {
-    //bla bla hold pneumatic pistons position 
+    conveyorSolenoid.set(Value.kOff); 
   }
 
   public void LowerConveyer() {
-    //bla bla close pneumatic pistons
+    conveyorSolenoid.set(Value.kReverse);
   }
 
   @Override
