@@ -35,6 +35,7 @@ public class DriveTrain extends SubsystemBase {
   SmartDashboard.putNumber("zRotation", zRotation);
 }
 
-public void log() {
-}
+  public void log() {
+    //pee pee poo poo why are you reading this
+ }
 }
