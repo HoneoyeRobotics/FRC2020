@@ -59,14 +59,14 @@ public class RunControlPanelArmWheel extends CommandBase {
     if (CurrentSpeed <= 0.0) {
       CurrentSpeed = 0;
     }
-    controlPanel.run(CurrentSpeed);
+    controlPanel.RunArmWheel(CurrentSpeed);
     SmartDashboard.putString("RunWheelStatus", "Execute");
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    controlPanel.stopRunning();
+    controlPanel.RunArmWheel(0);
     SmartDashboard.putString("RunWheelStatus", "End");
   }
 

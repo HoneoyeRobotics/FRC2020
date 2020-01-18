@@ -10,11 +10,20 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Climber extends SubsystemBase {
-  /**
-   * Creates a new Climber.
-   */
   public Climber() {
+    //initialize all motors here
+  }
 
+  public void RaiseClimber() {
+    //bla bla elevate climber
+  }
+
+  public void LowerClimber() {
+    //bla bla retract climber
+  }
+
+  public void HoldClimber() {
+    //bla bla hold climbers current position
   }
 
   @Override

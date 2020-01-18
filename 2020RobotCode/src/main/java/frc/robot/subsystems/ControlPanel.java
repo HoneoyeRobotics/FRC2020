@@ -50,27 +50,22 @@ public class ControlPanel extends SubsystemBase {
     
     SmartDashboard.putNumber("Editable Confidence", editableConfidence);
   }
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
+
+  public void MoveArmWheel() {
+    //bla bla moves arm wheel
   }
 
-  
-  public void run(double speed) {
+  public void RunArmWheel(double speed) {
     m_ControlPanelArmWheel.set(speed);
   }
 
-  public void startRunning() {
-    m_ControlPanelArmWheel.set(ControlPanelArmWheelSpeed);
+  public void ExtendArmWheel() {
+    //bla bla extends arm wheel from frame
   }
 
-  /**
-   * Set the claw motor to move in the close direction.
-   */
-  public void stopRunning() {
-    m_ControlPanelArmWheel.set(0);
+  public void RetractArmWheel() {
+    //bla bla retracts arm wheel to frame
   }
-
 
   public MatchedColor getColor(){
     Color detectedColor = m_colorSensor.getColor();
@@ -99,7 +94,9 @@ public class ControlPanel extends SubsystemBase {
     return currentColor;
     
   }
-  // public void drive(final double xSpeed) {
-  //   m_ControlPanelArmWheel.open();
-  // }
+  
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+  }
 }
