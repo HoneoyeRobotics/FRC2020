@@ -1,0 +1,1 @@
+xcopy C:\SuitsGIT\FRC2020\Tools\ColorSensor\ColorSensorV3-java C:\Users\Public\wpilib\2020\maven\com\revrobotics\frc\ColorSensorV3-java\ /y /e 
