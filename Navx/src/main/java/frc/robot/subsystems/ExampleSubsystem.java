@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.kauailabs.navx.frc.AHRS.BoardYawAxis;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
@@ -30,6 +31,7 @@ public class ExampleSubsystem extends SubsystemBase {
        * details.
        */
       navx = new AHRS(SPI.Port.kMXP);
+      
     } catch (RuntimeException ex) {
       DriverStation.reportError("Error instantiating navX-MXP:  " + ex.getMessage(), true);
     }
@@ -39,8 +41,14 @@ public class ExampleSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
+
+    
     
     boolean motionDetected = navx.isMoving();
+    SmartDashboard.putNumber("Rotation", navx.getAngle());
     SmartDashboard.putBoolean("MotionDetected", motionDetected);
+    SmartDashboard.putNumber("Pitch", navx.getPitch());
+    SmartDashboard.putNumber("Roll", navx.getRoll());
+
   }
 }

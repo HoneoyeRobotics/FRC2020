@@ -15,18 +15,30 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.SPI;
 
 public class DriveTrain extends SubsystemBase {
   private final SpeedController m_leftMotorGroup = new SpeedControllerGroup(new WPI_VictorSPX(1), new WPI_VictorSPX(2));
   private final SpeedController m_rightMotorGroup = new SpeedControllerGroup(new WPI_VictorSPX(3), new WPI_TalonSRX(9));
   private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotorGroup, m_rightMotorGroup);
   
+  private final AHRS navx;
+
   public DriveTrain() {
+    
+    navx = new AHRS(SPI.Port.kMXP);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    
+    boolean motionDetected = navx.isMoving();
+    SmartDashboard.putNumber("Rotation", navx.getAngle());
+    SmartDashboard.putBoolean("MotionDetected", motionDetected);
+    SmartDashboard.putNumber("Pitch", navx.getPitch());
+    SmartDashboard.putNumber("Roll", navx.getRoll());
   }
 
   public void drive(double xSpeed, double zRotation) {

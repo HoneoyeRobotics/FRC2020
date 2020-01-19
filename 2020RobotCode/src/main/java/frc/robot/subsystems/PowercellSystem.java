@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class PowerCellSystem extends SubsystemBase {
-  private final int PCMID;  
   private final Compressor compressor;
   private final DoubleSolenoid conveyorSolenoid;
   private final DoubleSolenoid rearHatchSolenoid;
@@ -26,7 +25,6 @@ public class PowerCellSystem extends SubsystemBase {
     //initializes compressor here
     conveyorSolenoid = new DoubleSolenoid (PCMID, 4,5);
     rearHatchSolenoid = new DoubleSolenoid (PCMID, 2,3);
-    this.PCMID = PCMID;
     compressor = new Compressor(PCMID);
     compressor.setClosedLoopControl(true);
   }
