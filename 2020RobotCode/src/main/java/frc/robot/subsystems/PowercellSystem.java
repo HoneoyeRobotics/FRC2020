@@ -14,14 +14,14 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class PowerCellSystem extends SubsystemBase {
+public class PowercellSystem extends SubsystemBase {
   private final Compressor compressor;
   private final DoubleSolenoid conveyorSolenoid;
   private final DoubleSolenoid rearHatchSolenoid;
   //private final VictorSfinal final PX m_ConveyerMotor;
   private final WPI_VictorSPX conveyerMotor = new WPI_VictorSPX(10);
   
-  public PowerCellSystem(int PCMID) {
+  public PowercellSystem(int PCMID) {
     //initializes compressor here
     conveyorSolenoid = new DoubleSolenoid (PCMID, 4,5);
     rearHatchSolenoid = new DoubleSolenoid (PCMID, 2,3);

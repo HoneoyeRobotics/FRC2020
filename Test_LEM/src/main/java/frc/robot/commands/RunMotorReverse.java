@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
+/* Copyright (c) 2018-2019 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -7,18 +7,25 @@
 
 package frc.robot.commands;
 
+import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.*;
 
-public class DepositPowercells extends CommandBase {
-  private final PowercellSystem powerCellSystem;
+/**
+ * An example command that uses an example subsystem.
+ */
+public class RunMotorReverse extends CommandBase {
+  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
+  private final ExampleSubsystem m_subsystem;
+
   /**
-   * Creates a new DepositPowercells.
+   * Creates a new ExampleCommand.
+   *
+   * @param subsystem The subsystem used by this command.
    */
-  public DepositPowercells(PowercellSystem powerCellSystem) {
+  public RunMotorReverse(ExampleSubsystem subsystem) {
+    m_subsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
-    this.powerCellSystem = powerCellSystem;
-    addRequirements(powerCellSystem);
+    addRequirements(subsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -29,17 +36,14 @@ public class DepositPowercells extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    powerCellSystem.RunConveyer(1.0);
-    powerCellSystem.LowerConveyer();
-    powerCellSystem.OpenConveyerHatch();
+    m_subsystem.run(-1);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    powerCellSystem.RunConveyer(0.0);
-    powerCellSystem.HoldConveyer();
-    powerCellSystem.HoldConveyerHatch();
+    
+    m_subsystem.run(0);
   }
 
   // Returns true when the command should end.

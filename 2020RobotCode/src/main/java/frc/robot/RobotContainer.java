@@ -35,7 +35,7 @@ public class RobotContainer {
   private final ControlPanel controlPanel;
   private final DriveTrain drivetrain;
   private final Climber climber;
-  private final PowerCellSystem powerCellSystem;
+  private final PowercellSystem powerCellSystem;
   private final int PCM_CANID = 10;
   private final Joystick driverJoystick = new Joystick(0);
   private final Joystick pilotJoystick = new Joystick(1);
@@ -53,7 +53,7 @@ public class RobotContainer {
     drivetrain = new DriveTrain();
     climber = new Climber(PCM_CANID);
     controlPanel = new ControlPanel(PCM_CANID);
-    powerCellSystem = new PowerCellSystem(PCM_CANID);
+    powerCellSystem = new PowercellSystem(PCM_CANID);
 
     drivetrain.setDefaultCommand(new ArcadeDrive(() -> driverJoystick.getRawAxis(1) * -1,
         () -> driverJoystick.getRawAxis(2) - driverJoystick.getRawAxis(3), drivetrain));
