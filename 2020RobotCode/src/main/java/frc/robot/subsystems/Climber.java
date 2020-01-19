@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Climber extends SubsystemBase {
@@ -16,19 +17,19 @@ public class Climber extends SubsystemBase {
 
   public Climber(int PCMID) {
     //initialize all motors here
-    elevatorSolenoid = new DoubleSolenoid (PCMID, 4,5);
+    elevatorSolenoid = new DoubleSolenoid (PCMID, 0,1);
   }
 
   public void RaiseClimber() {
-    //bla bla elevate climber
+    elevatorSolenoid.set(Value.kForward);
   }
 
   public void LowerClimber() {
-    //bla bla retract climber
+    elevatorSolenoid.set(Value.kReverse);
   }
 
   public void HoldClimber() {
-    //bla bla hold climbers current position
+    elevatorSolenoid.set(Value.kOff);
   }
 
   @Override

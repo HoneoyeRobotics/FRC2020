@@ -11,11 +11,14 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.*;
 
 public class DepositPowercells extends CommandBase {
+  private final PowerCellSystem powerCellSystem;
   /**
    * Creates a new DepositPowercells.
    */
-  public DepositPowercells() {
+  public DepositPowercells(PowerCellSystem powerCellSystem) {
     // Use addRequirements() here to declare subsystem dependencies.
+    this.powerCellSystem = powerCellSystem;
+    addRequirements(powerCellSystem);
   }
 
   // Called when the command is initially scheduled.
@@ -26,11 +29,17 @@ public class DepositPowercells extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    powerCellSystem.RunConveyer(1.0);
+    powerCellSystem.LowerConveyer();
+    powerCellSystem.OpenConveyerHatch();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    powerCellSystem.RunConveyer(0.0);
+    powerCellSystem.HoldConveyer();
+    powerCellSystem.HoldConveyerHatch();
   }
 
   // Returns true when the command should end.

@@ -8,34 +8,35 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.ControlPanel;
 
-public class RetractClimber extends CommandBase {
+public class RetractControlPanelArm extends CommandBase {
   /**
-   * Creates a new RetractClimber.
+   * Creates a new ToggleControlPanelArm.
    */
-  private final Climber climber;
-  public RetractClimber(Climber climber) {
+  private final ControlPanel controlPanel;
+
+  public RetractControlPanelArm(ControlPanel controlPanel) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.climber = climber;
-    addRequirements(climber);
+    this.controlPanel = controlPanel;
+    addRequirements(controlPanel);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    climber.LowerClimber();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    controlPanel.RetractArmWheel();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    climber.HoldClimber();
+    controlPanel.HoldArmWheel();
   }
 
   // Returns true when the command should end.
