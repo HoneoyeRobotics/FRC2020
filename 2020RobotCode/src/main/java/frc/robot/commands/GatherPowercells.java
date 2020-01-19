@@ -7,6 +7,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.*;
 
@@ -29,13 +30,17 @@ public class GatherPowercells extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    powerCellSystem.RunFrontWheel(1.0);
+    powerCellSystem.RunConveyer(1.0);
+    powerCellSystem.RaiseConveyer();
+    powerCellSystem.CloseConveyerHatch();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    powerCellSystem.RunFrontWheel(0.0);
+    powerCellSystem.RunConveyer(0.0);
+    powerCellSystem.HoldConveyer();
+    powerCellSystem.HoldConveyerHatch();
   }
 
   // Returns true when the command should end.

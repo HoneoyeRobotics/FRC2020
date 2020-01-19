@@ -12,8 +12,10 @@ import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -22,6 +24,8 @@ public class ControlPanel extends SubsystemBase {
   double ControlPanelArmWheelSpeed = 0.5;
   private final WPI_VictorSPX m_ControlPanelArmWheel = new WPI_VictorSPX(8);
   
+  private final DoubleSolenoid armWheelSolenoid;
+
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
   private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
 
@@ -34,8 +38,9 @@ public class ControlPanel extends SubsystemBase {
   private final Color kYellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
   private double editableConfidence = 0.92;
 
-  public ControlPanel() {
+  public ControlPanel(int PCMID) {
     resetConfidence();
+    armWheelSolenoid = new DoubleSolenoid (PCMID, 6,7);
     SmartDashboard.putNumber("Editable Confidence", editableConfidence);
     m_colorMatcher.addColorMatch(kBlueTarget);
     m_colorMatcher.addColorMatch(kGreenTarget);
@@ -51,8 +56,16 @@ public class ControlPanel extends SubsystemBase {
     SmartDashboard.putNumber("Editable Confidence", editableConfidence);
   }
 
-  public void MoveArmWheel() {
-    //bla bla moves arm wheel
+  public void ExtendArmWheel() {
+    armWheelSolenoid.set(Value.kForward);
+  }
+
+  public void HoldArmWheel() {
+    armWheelSolenoid.set(Value.kOff);
+  }
+
+  public void RetractArmWheel() {
+    armWheelSolenoid.set(Value.kReverse);
   }
 
   /**

@@ -8,17 +8,18 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.ControlPanel;
 
-public class DepositPowercells extends CommandBase {
-  private final PowerCellSystem powerCellSystem;
+public class RetractControlPanelArm extends CommandBase {
   /**
-   * Creates a new DepositPowercells.
+   * Creates a new ToggleControlPanelArm.
    */
-  public DepositPowercells(PowerCellSystem powerCellSystem) {
+  private final ControlPanel controlPanel;
+
+  public RetractControlPanelArm(ControlPanel controlPanel) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.powerCellSystem = powerCellSystem;
-    addRequirements(powerCellSystem);
+    this.controlPanel = controlPanel;
+    addRequirements(controlPanel);
   }
 
   // Called when the command is initially scheduled.
@@ -29,17 +30,13 @@ public class DepositPowercells extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    powerCellSystem.RunConveyer(1.0);
-    powerCellSystem.LowerConveyer();
-    powerCellSystem.OpenConveyerHatch();
+    controlPanel.RetractArmWheel();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    powerCellSystem.RunConveyer(0.0);
-    powerCellSystem.HoldConveyer();
-    powerCellSystem.HoldConveyerHatch();
+    controlPanel.HoldArmWheel();
   }
 
   // Returns true when the command should end.

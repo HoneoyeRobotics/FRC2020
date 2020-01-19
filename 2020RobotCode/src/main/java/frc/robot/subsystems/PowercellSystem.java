@@ -20,8 +20,7 @@ public class PowerCellSystem extends SubsystemBase {
   private final DoubleSolenoid conveyorSolenoid;
   private final DoubleSolenoid rearHatchSolenoid;
   //private final VictorSfinal final PX m_ConveyerMotor;
-  private final WPI_VictorSPX frontWheelMotor = new WPI_VictorSPX(10); 
-  private final WPI_VictorSPX conveyerMotor = new WPI_VictorSPX(11);
+  private final WPI_VictorSPX conveyerMotor = new WPI_VictorSPX(10);
   
   public PowerCellSystem(int PCMID) {
     //initializes compressor here
@@ -30,10 +29,6 @@ public class PowerCellSystem extends SubsystemBase {
     this.PCMID = PCMID;
     compressor = new Compressor(PCMID);
     compressor.setClosedLoopControl(true);
-  }
-
-  public void RunFrontWheel(double speed) {
-    frontWheelMotor.set(speed);
   }
 
   public void RunConveyer(double speed) {

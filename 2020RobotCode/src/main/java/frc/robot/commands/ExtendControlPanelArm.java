@@ -10,13 +10,13 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ControlPanel;
 
-public class ToggleControlPanelArm extends CommandBase {
+public class ExtendControlPanelArm extends CommandBase {
   /**
    * Creates a new ToggleControlPanelArm.
    */
   private final ControlPanel controlPanel;
 
-  public ToggleControlPanelArm(ControlPanel controlPanel) {
+  public ExtendControlPanelArm(ControlPanel controlPanel) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.controlPanel = controlPanel;
     addRequirements(controlPanel);
@@ -30,11 +30,13 @@ public class ToggleControlPanelArm extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    controlPanel.ExtendArmWheel();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    controlPanel.HoldArmWheel();
   }
 
   // Returns true when the command should end.
