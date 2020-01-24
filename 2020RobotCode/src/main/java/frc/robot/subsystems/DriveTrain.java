@@ -7,7 +7,7 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.SpeedController;
@@ -19,8 +19,8 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 
 public class DriveTrain extends SubsystemBase {
-  private final SpeedController m_leftMotorGroup = new SpeedControllerGroup(new WPI_VictorSPX(1), new WPI_VictorSPX(2));
-  private final SpeedController m_rightMotorGroup = new SpeedControllerGroup(new WPI_VictorSPX(3), new WPI_TalonSRX(9));
+  private final SpeedController m_leftMotorGroup = new SpeedControllerGroup(new WPI_VictorSPX(26), new WPI_VictorSPX(25));
+  private final SpeedController m_rightMotorGroup = new SpeedControllerGroup(new WPI_VictorSPX(27), new WPI_VictorSPX(28));
   private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotorGroup, m_rightMotorGroup);
   
   private final AHRS navx;
@@ -46,6 +46,10 @@ public class DriveTrain extends SubsystemBase {
   SmartDashboard.putNumber("xSpeed", xSpeed);
   SmartDashboard.putNumber("zRotation", zRotation);
 }
+
+  public double getAngle() {
+    return navx.getAngle();
+  }
 
   public void log() {
     //pee pee poo poo why are you reading this

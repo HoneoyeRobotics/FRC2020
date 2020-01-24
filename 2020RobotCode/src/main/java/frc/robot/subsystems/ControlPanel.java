@@ -7,7 +7,8 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
@@ -22,7 +23,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ControlPanel extends SubsystemBase {
   double ControlPanelArmWheelSpeed = 0.5;
-  private final WPI_VictorSPX m_ControlPanelArmWheel = new WPI_VictorSPX(8);
+  private final WPI_TalonSRX m_ControlPanelArmWheel = new WPI_TalonSRX(23);
   
   private final DoubleSolenoid armWheelSolenoid;
 
