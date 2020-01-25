@@ -10,14 +10,15 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Climber extends SubsystemBase {
   
   private final DoubleSolenoid elevatorSolenoid;
 
-  public Climber(int PCMID) {
+  public Climber() {
     //initialize all motors here
-    elevatorSolenoid = new DoubleSolenoid (PCMID, 0,1);
+    elevatorSolenoid = new DoubleSolenoid (Constants.CANID_PCM, Constants.PCMID_ScissorLiftForward, Constants.PCMID_ScissorLiftBackward);
   }
 
   public void RaiseClimber() {

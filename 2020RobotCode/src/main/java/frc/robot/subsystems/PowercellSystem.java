@@ -14,19 +14,21 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class PowerCellSystem extends SubsystemBase {
   private final Compressor compressor;
   private final DoubleSolenoid conveyorSolenoid;
-  private final DoubleSolenoid rearHatchSolenoid;
+  //private final DoubleSolenoid rearHatchSolenoid;
   // private final VictorSfinal final PX m_ConveyerMotor;
-  private final WPI_TalonSRX conveyerMotor = new WPI_TalonSRX(24);
+  private final WPI_TalonSRX conveyerMotor = new WPI_TalonSRX(Constants.CANID_ConveyerMotor);
+  private final WPI_TalonSRX intakeMotor = new WPI_TalonSRX(Constants.CANID_IntakeMotor);
 
-  public PowerCellSystem(int PCMID) {
+  public PowerCellSystem() {
     //initializes compressor here
-    conveyorSolenoid = new DoubleSolenoid (PCMID, 4,5);
-    rearHatchSolenoid = new DoubleSolenoid (PCMID, 2,3);
-    compressor = new Compressor(PCMID);
+    conveyorSolenoid = new DoubleSolenoid (Constants.CANID_PCM, Constants.PCMID_ConveyerSoleniodForward, Constants.PCMID_ConveyerSoleniodBackward);
+   //rearHatchSolenoid = new DoubleSolenoid (Constants.CANID_PCM, Constants.PCMID_ConveyerHatchForward, Constants.PCMID_ConveyerHatchBackward);
+    compressor = new Compressor(Constants.CANID_PCM);
     compressor.setClosedLoopControl(true);
   }
 
@@ -34,17 +36,21 @@ public class PowerCellSystem extends SubsystemBase {
     conveyerMotor.set(speed);
   }
 
-  public void OpenConveyerHatch() {
-    rearHatchSolenoid.set(Value.kForward);
+  public void RunIntake(double speed) {
+    intakeMotor.set(speed);
   }
 
-  public void CloseConveyerHatch() {
-    rearHatchSolenoid.set(Value.kReverse);
-  }
+  // public void OpenConveyerHatch() {
+  //   rearHatchSolenoid.set(Value.kForward);
+  // }
 
-  public void HoldConveyerHatch() {
-    rearHatchSolenoid.set(Value.kOff);
-  }
+  // public void CloseConveyerHatch() {
+  //   rearHatchSolenoid.set(Value.kReverse);
+  // }
+
+  // public void HoldConveyerHatch() {
+  //   rearHatchSolenoid.set(Value.kOff);
+  // }
 
   public void RaiseConveyer() {
     conveyorSolenoid.set(Value.kForward);

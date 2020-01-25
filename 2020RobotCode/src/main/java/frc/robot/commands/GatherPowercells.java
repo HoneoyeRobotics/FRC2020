@@ -31,7 +31,7 @@ public class GatherPowercells extends CommandBase {
   public void execute() {
     powerCellSystem.RunConveyer(1.0);
     powerCellSystem.RaiseConveyer();
-    powerCellSystem.CloseConveyerHatch();
+    //powerCellSystem.CloseConveyerHatch();
   }
 
   // Called once the command ends or is interrupted.
@@ -39,7 +39,7 @@ public class GatherPowercells extends CommandBase {
   public void end(boolean interrupted) {
     powerCellSystem.RunConveyer(0.0);
     powerCellSystem.HoldConveyer();
-    powerCellSystem.HoldConveyerHatch();
+    //powerCellSystem.HoldConveyerHatch();
   }
 
   // Returns true when the command should end.

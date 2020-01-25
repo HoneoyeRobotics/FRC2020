@@ -20,10 +20,11 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class ControlPanel extends SubsystemBase {
   double ControlPanelArmWheelSpeed = 0.5;
-  private final WPI_TalonSRX m_ControlPanelArmWheel = new WPI_TalonSRX(23);
+  private final WPI_TalonSRX m_ControlPanelArmWheel = new WPI_TalonSRX(Constants.CANID_ArmWheelMotor);
   
   private final DoubleSolenoid armWheelSolenoid;
 
@@ -39,9 +40,9 @@ public class ControlPanel extends SubsystemBase {
   private final Color kYellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
   private double editableConfidence = 0.92;
 
-  public ControlPanel(int PCMID) {
+  public ControlPanel() {
     resetConfidence();
-    armWheelSolenoid = new DoubleSolenoid (PCMID, 6,7);
+    armWheelSolenoid = new DoubleSolenoid (Constants.CANID_PCM, Constants.PCMID_ControlPanelSoleniodForward, Constants.PCMID_ContorlPanelSoleniodBackward);
     SmartDashboard.putNumber("Editable Confidence", editableConfidence);
     m_colorMatcher.addColorMatch(kBlueTarget);
     m_colorMatcher.addColorMatch(kGreenTarget);

@@ -18,15 +18,16 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 
+import frc.robot.Constants;
+
 public class DriveTrain extends SubsystemBase {
-  private final SpeedController m_leftMotorGroup = new SpeedControllerGroup(new WPI_VictorSPX(26), new WPI_VictorSPX(25));
-  private final SpeedController m_rightMotorGroup = new SpeedControllerGroup(new WPI_VictorSPX(27), new WPI_VictorSPX(28));
+  private final SpeedController m_leftMotorGroup = new SpeedControllerGroup(new WPI_VictorSPX(Constants.CANID_FrontLeftDriveMotor), new WPI_VictorSPX(Constants.CANID_RearLeftDriveMotor));
+  private final SpeedController m_rightMotorGroup = new SpeedControllerGroup(new WPI_VictorSPX(Constants.CANID_FrontRightDriveMotor), new WPI_VictorSPX(Constants.CANID_RearRightDriveMotor));
   private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotorGroup, m_rightMotorGroup);
-  
   private final AHRS navx;
 
   public DriveTrain() {
-    
+    //AHRS ahrs = new AHRS(SerialPort.Port.kMXP); /* Alternatives: SPI.Port.kMXP, I2C.Port.kMXP or SerialPort.Port.kUSB */
     navx = new AHRS(SPI.Port.kMXP);
   }
 

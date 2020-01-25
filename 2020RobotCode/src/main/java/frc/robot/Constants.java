@@ -16,4 +16,25 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
+    //can bus IDs
+    public static final int CANID_PCM = 10;
+    public static final int CANID_FrontLeftDriveMotor = 26;
+    public static final int CANID_FrontRightDriveMotor = 27;
+    public static final int CANID_RearLeftDriveMotor = 25;
+    public static final int CANID_RearRightDriveMotor = 28;
+    public static final int CANID_ConveyerMotor = 24;
+    public static final int CANID_IntakeMotor = 21;
+    public static final int CANID_ArmWheelMotor = 23;
+    public static final int CANID_Spare = 22;
+
+    //PCM relay IDS 0-7
+    public static final int PCMID_ConveyerSoleniodForward = 0;
+    public static final int PCMID_ConveyerSoleniodBackward = 1;
+    // public static final int PCMID_ConveyerHatchForward = 2;
+    // public static final int PCMID_ConveyerHatchBackward = 3;
+    public static final int PCMID_ControlPanelSoleniodForward = 4;
+    public static final int PCMID_ContorlPanelSoleniodBackward = 5;
+    public static final int PCMID_ScissorLiftForward = 6;
+    public static final int PCMID_ScissorLiftBackward = 7;
 }
