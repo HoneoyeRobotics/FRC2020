@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class PowerCellSystem extends SubsystemBase {
+public class PowercellSystem extends SubsystemBase {
   private final Compressor compressor;
   private final DoubleSolenoid conveyorSolenoid;
   //private final DoubleSolenoid rearHatchSolenoid;
