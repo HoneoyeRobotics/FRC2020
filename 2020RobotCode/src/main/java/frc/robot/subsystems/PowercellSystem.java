@@ -24,7 +24,7 @@ public class PowercellSystem extends SubsystemBase {
   private final WPI_TalonSRX conveyerMotor = new WPI_TalonSRX(Constants.CANID_ConveyerMotor);
   private final WPI_TalonSRX intakeMotor = new WPI_TalonSRX(Constants.CANID_IntakeMotor);
 
-  public PowerCellSystem() {
+  public PowercellSystem() {
     //initializes compressor here
     conveyorSolenoid = new DoubleSolenoid (Constants.CANID_PCM, Constants.PCMID_ConveyerSoleniodForward, Constants.PCMID_ConveyerSoleniodBackward);
    //rearHatchSolenoid = new DoubleSolenoid (Constants.CANID_PCM, Constants.PCMID_ConveyerHatchForward, Constants.PCMID_ConveyerHatchBackward);
