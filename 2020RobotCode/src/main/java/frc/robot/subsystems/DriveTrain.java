@@ -54,5 +54,6 @@ public class DriveTrain extends SubsystemBase {
 
   public void log() {
     //pee pee poo poo why are you reading this
+    //did you know that cameras have a limited fov
  }
 }

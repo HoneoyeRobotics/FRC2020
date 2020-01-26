@@ -7,8 +7,7 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -21,8 +20,8 @@ public class PowercellSystem extends SubsystemBase {
   private final DoubleSolenoid conveyorSolenoid;
   //private final DoubleSolenoid rearHatchSolenoid;
   // private final VictorSfinal final PX m_ConveyerMotor;
-  private final WPI_TalonSRX conveyerMotor = new WPI_TalonSRX(Constants.CANID_ConveyerMotor);
-  private final WPI_TalonSRX intakeMotor = new WPI_TalonSRX(Constants.CANID_IntakeMotor);
+  private final WPI_VictorSPX conveyerMotor = new WPI_VictorSPX(Constants.CANID_ConveyerMotor);
+  private final WPI_VictorSPX intakeMotor = new WPI_VictorSPX(Constants.CANID_IntakeMotor);
 
   public PowercellSystem() {
     //initializes compressor here
