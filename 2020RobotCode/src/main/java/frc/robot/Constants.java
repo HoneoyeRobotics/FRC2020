@@ -19,12 +19,13 @@ public final class Constants {
 
     //can bus IDs
     public static final int CANID_PCM = 10;
-    public static final int CANID_FrontLeftDriveMotor = 26;
-    public static final int CANID_FrontRightDriveMotor = 27;
-    public static final int CANID_RearLeftDriveMotor = 25;
-    public static final int CANID_RearRightDriveMotor = 28;
-    public static final int CANID_ConveyerMotor = 24;
-    public static final int CANID_IntakeMotor = 21;
+    public static final int CANID_FrontLeftDriveMotor = 27;
+    public static final int CANID_RearLeftDriveMotor = 28;
+
+    public static final int CANID_FrontRightDriveMotor = 26;
+    public static final int CANID_RearRightDriveMotor = 25;
+    public static final int CANID_ConveyerMotor = 34;
+    public static final int CANID_IntakeMotor = 33;
     public static final int CANID_ArmWheelMotor = 23;
     public static final int CANID_Spare = 22;
 

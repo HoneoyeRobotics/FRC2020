@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class PowercellSystem extends SubsystemBase {
-  private final Compressor compressor;
+  //private final Compressor compressor;
   private final DoubleSolenoid conveyorSolenoid;
   //private final DoubleSolenoid rearHatchSolenoid;
   // private final VictorSfinal final PX m_ConveyerMotor;
@@ -27,8 +27,8 @@ public class PowercellSystem extends SubsystemBase {
     //initializes compressor here
     conveyorSolenoid = new DoubleSolenoid (Constants.CANID_PCM, Constants.PCMID_ConveyerSoleniodForward, Constants.PCMID_ConveyerSoleniodBackward);
    //rearHatchSolenoid = new DoubleSolenoid (Constants.CANID_PCM, Constants.PCMID_ConveyerHatchForward, Constants.PCMID_ConveyerHatchBackward);
-    compressor = new Compressor(Constants.CANID_PCM);
-    compressor.setClosedLoopControl(true);
+   // compressor = new Compressor(Constants.CANID_PCM);
+    //compressor.setClosedLoopControl(true);
   }
 
   public void RunConveyer(double speed) {

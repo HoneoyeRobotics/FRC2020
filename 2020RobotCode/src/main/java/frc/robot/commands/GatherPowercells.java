@@ -29,7 +29,7 @@ public class GatherPowercells extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    powerCellSystem.RunConveyer(1.0);
+    powerCellSystem.RunIntake(1.0);
     powerCellSystem.RaiseConveyer();
     //powerCellSystem.CloseConveyerHatch();
   }
@@ -37,7 +37,7 @@ public class GatherPowercells extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    powerCellSystem.RunConveyer(0.0);
+    powerCellSystem.RunIntake(0.0);
     powerCellSystem.HoldConveyer();
     //powerCellSystem.HoldConveyerHatch();
   }

@@ -32,7 +32,7 @@ import frc.robot.subsystems.*;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ControlPanel controlPanel;
+ // private final ControlPanel controlPanel;
   private final DriveTrain drivetrain;
   private final Climber climber;
   private final PowercellSystem powerCellSystem;
@@ -51,17 +51,17 @@ public class RobotContainer {
     // construct subsystems
     drivetrain = new DriveTrain();
     climber = new Climber();
-    controlPanel = new ControlPanel();
+    //controlPanel = new ControlPanel();
     powerCellSystem = new PowercellSystem();
 
     drivetrain.setDefaultCommand(new ArcadeDrive(() -> driverJoystick.getRawAxis(1) * -1,
-        () -> driverJoystick.getRawAxis(2) - driverJoystick.getRawAxis(3), drivetrain));
-    controlPanel.setDefaultCommand(new ControlPanelColorVisionTracking(controlPanel));
+        () -> driverJoystick.getRawAxis(3) - driverJoystick.getRawAxis(2), drivetrain));
+    //controlPanel.setDefaultCommand(new ControlPanelColorVisionTracking(controlPanel));
     
     // Show what command your subsystem is running on the SmartDashboard
     SmartDashboard.putData(drivetrain);
-    SmartDashboard.putData(controlPanel);
-    SmartDashboard.putData(new ResetControlPanel(controlPanel));
+   // SmartDashboard.putData(controlPanel);
+  //  SmartDashboard.putData(new ResetControlPanel(controlPanel));
     
     // Call log method on all subsystems
     drivetrain.log();
@@ -86,10 +86,13 @@ public class RobotContainer {
     final JoystickButton leftBumper = new JoystickButton(pilotJoystick, 5);
     final JoystickButton rightBumper = new JoystickButton(pilotJoystick, 6);
 
+    final JoystickButton yButton = new JoystickButton(pilotJoystick, 4);
     // Connect the buttons to commands
-    aButton.toggleWhenPressed(new RunControlPanelArmWheel(controlPanel, () -> bButton.get(), () -> xButton.get()));
-    leftBumper.whileHeld(new ExtendControlPanelArm(controlPanel));
-    rightBumper.whileHeld(new RetractControlPanelArm(controlPanel));
+   // aButton.toggleWhenPressed(new RunControlPanelArmWheel(controlPanel, () -> false, () -> false));
+  //  leftBumper.whileHeld(new ExtendControlPanelArm(controlPanel));
+  //  rightBumper.whileHeld(new RetractControlPanelArm(controlPanel));
+    yButton.whileHeld(new GatherPowercells(powerCellSystem));
+    bButton.whileHeld(new DepositPowercells(powerCellSystem));
   }
 
   private void configureDriverButtonBindings() {
