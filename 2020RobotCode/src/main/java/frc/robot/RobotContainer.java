@@ -32,12 +32,13 @@ import frc.robot.subsystems.*;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
- // private final ControlPanel controlPanel;
+  // private final ControlPanel controlPanel;
   private final DriveTrain drivetrain;
   private final Climber climber;
   private final PowercellSystem powerCellSystem;
-  private final Joystick driverJoystick = new Joystick(0);
-  private final Joystick pilotJoystick = new Joystick(1);
+  private final Joystick leftDriverJoystick = new Joystick(0);
+  private final Joystick rightDriverJoystick = new Joystick(1);
+  private final Joystick pilotJoystick = new Joystick(2);
   // private final JoystickButton m_RunControlPanelArmWheel = new
   // JoystickButton(pilotJoystick, 0); // button A, check button id
   // private final Autonomous m_autonomousCommand = new Autonomous();
@@ -48,21 +49,24 @@ public class RobotContainer {
    */
   public RobotContainer() {
 
-    // construct subsystems
+    //construct subsystems
     drivetrain = new DriveTrain();
     climber = new Climber();
     //controlPanel = new ControlPanel();
     powerCellSystem = new PowercellSystem();
 
-    drivetrain.setDefaultCommand(new ArcadeDrive(() -> driverJoystick.getRawAxis(1) * -1,
-        () -> driverJoystick.getRawAxis(3) - driverJoystick.getRawAxis(2), drivetrain));
+    drivetrain.setDefaultCommand(new TankDrive(() -> leftDriverJoystick.getRawAxis(1) * -1,
+        () -> rightDriverJoystick.getRawAxis(1) * -1, drivetrain));
     //controlPanel.setDefaultCommand(new ControlPanelColorVisionTracking(controlPanel));
     
     // Show what command your subsystem is running on the SmartDashboard
     SmartDashboard.putData(drivetrain);
-   // SmartDashboard.putData(controlPanel);
-  //  SmartDashboard.putData(new ResetControlPanel(controlPanel));
-    
+    //SmartDashboard.putData(controlPanel);
+    SmartDashboard.putData(new ResetEncoders(drivetrain));
+    SmartDashboard.putData(new DriveForward(drivetrain, 2));
+    SmartDashboard.putData(new RotateDrive(drivetrain, 90));
+    SmartDashboard.putData(new AutoTest1(drivetrain));
+
     // Call log method on all subsystems
     drivetrain.log();
     m_autoCommand = new ArcadeDrive(null, null, drivetrain);
@@ -80,29 +84,34 @@ public class RobotContainer {
    */
   private void configurePilotButtonBindings() {
     // buttons for pilot joystick
-    final JoystickButton aButton = new JoystickButton(pilotJoystick, 1);
-    final JoystickButton bButton = new JoystickButton(pilotJoystick, 2);
-    final JoystickButton xButton = new JoystickButton(pilotJoystick, 3);
+    // final JoystickButton aButton = new JoystickButton(pilotJoystick, 1);
+    // final JoystickButton bButton = new JoystickButton(pilotJoystick, 2);
+    // final JoystickButton xButton = new JoystickButton(pilotJoystick, 3);
+    // final JoystickButton yButton = new JoystickButton(pilotJoystick, 4);
     final JoystickButton leftBumper = new JoystickButton(pilotJoystick, 5);
     final JoystickButton rightBumper = new JoystickButton(pilotJoystick, 6);
+    final JoystickButton backButton = new JoystickButton(pilotJoystick, 7);
+    final JoystickButton startButton = new JoystickButton(pilotJoystick, 8);
 
-    final JoystickButton yButton = new JoystickButton(pilotJoystick, 4);
     // Connect the buttons to commands
-   // aButton.toggleWhenPressed(new RunControlPanelArmWheel(controlPanel, () -> false, () -> false));
-  //  leftBumper.whileHeld(new ExtendControlPanelArm(controlPanel));
-  //  rightBumper.whileHeld(new RetractControlPanelArm(controlPanel));
-    yButton.whileHeld(new GatherPowercells(powerCellSystem));
-    bButton.whileHeld(new DepositPowercells(powerCellSystem));
+    leftBumper.whileHeld(new GatherPowercells(powerCellSystem));
+    rightBumper.whileHeld(new DepositPowercells(powerCellSystem));
+    //aButton.toggleWhenPressed(new RunControlPanelArmWheel(controlPanel, () -> false, () -> false));
+    //leftBumper.whileHeld(new ExtendControlPanelArm(controlPanel));
+    //rightBumper.whileHeld(new RetractControlPanelArm(controlPanel));
+    startButton.whileHeld(new ElevateClimber(climber)); 
+    backButton.whileHeld(new RetractClimber(climber));
+
   }
 
   private void configureDriverButtonBindings() {
-    // buttons for driverjoystick
-    final JoystickButton leftBumper = new JoystickButton(driverJoystick, 5);
-    final JoystickButton rightBumper = new JoystickButton(driverJoystick, 6);
+    
+  }
 
-    // connecting buttons to commands
-    leftBumper.whileHeld(new ElevateClimber(climber));
-    rightBumper.whileHeld(new RetractClimber(climber));
+  public void teleopInit(){
+    
+   ConveyerPistonInitilize ConveyerPistonInitilize = new ConveyerPistonInitilize(powerCellSystem);
+   ConveyerPistonInitilize.withTimeout(0.2).schedule(true);
   }
 
   /**

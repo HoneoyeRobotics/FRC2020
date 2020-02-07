@@ -17,38 +17,45 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 /**
  * An example command that uses an example subsystem.
  */
-public class ArcadeDrive extends CommandBase {
+public class RotateDrive extends CommandBase {
   private final DriveTrain m_drivetrain;
-  private final DoubleSupplier m_xSpeed;
-  private final DoubleSupplier m_zRotation;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ArcadeDrive(DoubleSupplier xSpeed, DoubleSupplier zRotation, DriveTrain drivetrain) {
+  public RotateDrive(DriveTrain drivetrain, double angle) {
     m_drivetrain = drivetrain;
-    m_xSpeed = xSpeed;
-    m_zRotation = zRotation;
     addRequirements(m_drivetrain);
+    this.angle = angle;
   }
+  private double angle = 0;
+  private double startAngle = 0;
+  private double endAngle = 0;
+@Override
+public void initialize() {
+  startAngle = m_drivetrain.getAngle();
+  endAngle = startAngle + angle;
+}
 
-// Called repeatedly when this Command is scheduled to run
 @Override
 public void execute() {
-  m_drivetrain.drive(m_xSpeed.getAsDouble(), m_zRotation.getAsDouble() * 0.75);
+  double driveSpeed = 0.5;
+  if(m_drivetrain.getAngle() > endAngle)
+    driveSpeed *= -1;
+  m_drivetrain.drive(driveSpeed, driveSpeed * -1);
 }
 
 // Make this return true when this Command no longer needs to run execute()
 @Override
 public boolean isFinished() {
-  return false; // Runs until interrupted
+  return m_drivetrain.getAngle() > endAngle;
 }
 
-// Called once after isFinished returns true
 @Override
 public void end(boolean interrupted) {
   m_drivetrain.drive(0, 0);
 }
+
 }

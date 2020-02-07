@@ -26,9 +26,8 @@ public class PowercellSystem extends SubsystemBase {
   public PowercellSystem() {
     //initializes compressor here
     conveyorSolenoid = new DoubleSolenoid (Constants.CANID_PCM, Constants.PCMID_ConveyerSoleniodForward, Constants.PCMID_ConveyerSoleniodBackward);
-   //rearHatchSolenoid = new DoubleSolenoid (Constants.CANID_PCM, Constants.PCMID_ConveyerHatchForward, Constants.PCMID_ConveyerHatchBackward);
-   // compressor = new Compressor(Constants.CANID_PCM);
-    //compressor.setClosedLoopControl(true);
+    Compressor compressor = new Compressor(Constants.CANID_PCM);
+    compressor.setClosedLoopControl(true);
   }
 
   public void RunConveyer(double speed) {
@@ -38,18 +37,6 @@ public class PowercellSystem extends SubsystemBase {
   public void RunIntake(double speed) {
     intakeMotor.set(speed);
   }
-
-  // public void OpenConveyerHatch() {
-  //   rearHatchSolenoid.set(Value.kForward);
-  // }
-
-  // public void CloseConveyerHatch() {
-  //   rearHatchSolenoid.set(Value.kReverse);
-  // }
-
-  // public void HoldConveyerHatch() {
-  //   rearHatchSolenoid.set(Value.kOff);
-  // }
 
   public void RaiseConveyer() {
     conveyorSolenoid.set(Value.kForward);

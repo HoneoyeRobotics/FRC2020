@@ -30,12 +30,15 @@ public final class Constants {
     public static final int CANID_Spare = 22;
 
     //PCM relay IDS 0-7
-    public static final int PCMID_ConveyerSoleniodForward = 0;
-    public static final int PCMID_ConveyerSoleniodBackward = 1;
-    // public static final int PCMID_ConveyerHatchForward = 2;
-    // public static final int PCMID_ConveyerHatchBackward = 3;
-    public static final int PCMID_ControlPanelSoleniodForward = 4;
+    public static final int PCMID_ConveyerSoleniodForward = 2;
+    public static final int PCMID_ConveyerSoleniodBackward = 3;
+    public static final int PCMID_ControlPanelSoleniodForward = 3;
     public static final int PCMID_ContorlPanelSoleniodBackward = 5;
-    public static final int PCMID_ScissorLiftForward = 6;
-    public static final int PCMID_ScissorLiftBackward = 7;
+    public static final int PCMID_ScissorLiftForward = 0;
+    public static final int PCMID_ScissorLiftBackward = 1;
+
+    public static final int leftEncoderA = 1;
+    public static final int leftEncoderB = 0;
+    public static final int rightEncoderA = 4;
+    public static final int rightEncoderB = 5;
 }
