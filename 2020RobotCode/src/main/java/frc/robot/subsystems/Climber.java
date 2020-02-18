@@ -15,10 +15,30 @@ import frc.robot.Constants;
 public class Climber extends SubsystemBase {
   
   private final DoubleSolenoid elevatorSolenoid;
-
+  private final DoubleSolenoid extraLiftSolenoid;
+  private boolean extraLiftEngaged = false;
   public Climber() {
     //initialize all motors here
     elevatorSolenoid = new DoubleSolenoid (Constants.CANID_PCM, Constants.PCMID_ScissorLiftForward, Constants.PCMID_ScissorLiftBackward);
+    extraLiftSolenoid = new DoubleSolenoid (Constants.CANID_PCM, Constants.PCMID_ExtraLiftEngaged, Constants.PCMID_ExtraLiftDisengaged);
+  }
+
+  public boolean isExtraLiftEngaged(){
+    return extraLiftEngaged;
+  }
+  
+  public void EngageExtraLift() {
+    extraLiftSolenoid.set(Value.kForward);
+    extraLiftEngaged = true;
+  }
+
+  public void DisengageExtraLift() {
+    extraLiftSolenoid.set(Value.kReverse);
+    extraLiftEngaged = false;
+  }
+
+  public void HoldExtraLift() {
+    extraLiftSolenoid.set(Value.kOff);
   }
 
   public void RaiseClimber() {

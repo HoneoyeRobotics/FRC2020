@@ -30,32 +30,34 @@ public class RotateDrive extends CommandBase {
     addRequirements(m_drivetrain);
     this.angle = angle;
   }
+
   private double angle = 0;
   private double startAngle = 0;
   private double endAngle = 0;
-@Override
-public void initialize() {
-  startAngle = m_drivetrain.getAngle();
-  endAngle = startAngle + angle;
-}
 
-@Override
-public void execute() {
-  double driveSpeed = 0.5;
-  if(m_drivetrain.getAngle() > endAngle)
-    driveSpeed *= -1;
-  m_drivetrain.drive(driveSpeed, driveSpeed * -1);
-}
+  @Override
+  public void initialize() {
+    startAngle = m_drivetrain.getAngle();
+    endAngle = startAngle + angle;
+  }
 
-// Make this return true when this Command no longer needs to run execute()
-@Override
-public boolean isFinished() {
-  return m_drivetrain.getAngle() > endAngle;
-}
+  @Override
+  public void execute() {
+    double driveSpeed = 0.5;
+    if (m_drivetrain.getAngle() > endAngle)
+      driveSpeed *= -1;
+    m_drivetrain.drive(0, driveSpeed);
+  }
 
-@Override
-public void end(boolean interrupted) {
-  m_drivetrain.drive(0, 0);
-}
+  // Make this return true when this Command no longer needs to run execute()
+  @Override
+  public boolean isFinished() {
+    return m_drivetrain.getAngle() > endAngle;
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    m_drivetrain.drive(0, 0);
+  }
 
 }

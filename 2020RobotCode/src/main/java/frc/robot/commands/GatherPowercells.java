@@ -24,6 +24,10 @@ public class GatherPowercells extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    if(powerCellSystem.getArmUp() == true) {
+      powerCellSystem.LowerConveyer();
+      powerCellSystem.setArmUp(false);
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.

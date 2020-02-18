@@ -9,9 +9,11 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -22,12 +24,25 @@ public class PowercellSystem extends SubsystemBase {
   // private final VictorSfinal final PX m_ConveyerMotor;
   private final WPI_VictorSPX conveyerMotor = new WPI_VictorSPX(Constants.CANID_ConveyerMotor);
   private final WPI_VictorSPX intakeMotor = new WPI_VictorSPX(Constants.CANID_IntakeMotor);
+  private final AnalogInput pressureReader;
+
+  private boolean armUp = false;
 
   public PowercellSystem() {
     //initializes compressor here
     conveyorSolenoid = new DoubleSolenoid (Constants.CANID_PCM, Constants.PCMID_ConveyerSoleniodForward, Constants.PCMID_ConveyerSoleniodBackward);
     Compressor compressor = new Compressor(Constants.CANID_PCM);
+    pressureReader = new AnalogInput(0);
     compressor.setClosedLoopControl(true);
+  }
+
+  public boolean getArmUp(){
+    return armUp;
+  }
+
+  public void setArmUp(boolean armUp){
+    this.armUp = armUp;
+    SmartDashboard.putBoolean("ArmUp", armUp);
   }
 
   public void RunConveyer(double speed) {
@@ -52,6 +67,7 @@ public class PowercellSystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    SmartDashboard.putNumber("PSI ", pressureReader.getVoltage());
+    SmartDashboard.putNumber("Average PSI ", pressureReader.getAverageVoltage());
   }
 }
