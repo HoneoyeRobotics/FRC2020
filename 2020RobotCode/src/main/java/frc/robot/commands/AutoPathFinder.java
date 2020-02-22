@@ -19,14 +19,14 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.commands.*;
 import frc.robot.Constants;
 
-public class AutoPathFinderTest extends SequentialCommandGroup {
+public class AutoPathFinder extends SequentialCommandGroup {
   /**
    * Creates a new AutoPathFinderTest.
    */
-  public AutoPathFinderTest(DriveTrain drivetrain) {
+  public AutoPathFinder(DriveTrain drivetrain, String pathName) {
     // Use addRequirements() here to declare subsystem dependencies.
     RamseteCommand ramseteCommand = null;
-    String trajectoryJSON = "paths/Test1.wpilib.json";
+    String trajectoryJSON = "paths/" + pathName + ".wpilib.json";
 
     Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
 

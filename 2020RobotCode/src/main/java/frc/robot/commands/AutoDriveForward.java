@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 /**
  * An example command that uses an example subsystem.
  */
-public class DriveForward extends CommandBase {
+public class AutoDriveForward extends CommandBase {
   private final DriveTrain m_drivetrain;
 
   /**
@@ -25,12 +25,13 @@ public class DriveForward extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public DriveForward(DriveTrain drivetrain, double distance) {
+  public AutoDriveForward(DriveTrain drivetrain, double distance, double speed) {
     m_drivetrain = drivetrain;
     addRequirements(m_drivetrain);
     this.distance = distance;
+    this.speed = speed;
   }
-
+  private final double speed;
   private double distance = 0;
   private double startEncoder = 0;
   private double endEncoder = 0;
@@ -43,7 +44,7 @@ public class DriveForward extends CommandBase {
 
   @Override
   public void execute() {
-    m_drivetrain.drive(0.5, 0.5);
+    m_drivetrain.drive(speed, 0);
   }
 
   // Make this return true when this Command no longer needs to run execute()

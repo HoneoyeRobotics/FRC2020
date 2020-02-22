@@ -67,7 +67,8 @@ public class PowercellSystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("PSI ", pressureReader.getVoltage());
-    SmartDashboard.putNumber("Average PSI ", pressureReader.getAverageVoltage());
+    // SmartDashboard.putNumber("PSI Raw Voltage", pressureReader.getVoltage());
+     SmartDashboard.putNumber("PSI", (pressureReader.getVoltage() - 1) * 36.25);
+    //SmartDashboard.putNumber("Average PSI ", (pressureReader.getAverageVoltage() - 1) * 36.25);
   }
 }

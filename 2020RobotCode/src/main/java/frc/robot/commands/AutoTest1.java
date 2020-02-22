@@ -26,9 +26,9 @@ public class AutoTest1 extends SequentialCommandGroup {
    */
   public AutoTest1(DriveTrain drivetrain) {
     addCommands(new RotateDrive(drivetrain, 90), 
-    new DriveForward(drivetrain, 1), 
+    new AutoDriveForward(drivetrain, 1, 1), 
     new RotateDrive(drivetrain, 270),
-        new DriveForward(drivetrain, 1));
+        new AutoDriveForward(drivetrain, 1, 1));
   }
 
 }

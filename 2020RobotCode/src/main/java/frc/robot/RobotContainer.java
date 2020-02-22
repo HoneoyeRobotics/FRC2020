@@ -31,11 +31,13 @@ import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
@@ -70,7 +72,8 @@ public class RobotContainer {
   // JoystickButton(coPilotjoystick, 0); // button A, check button id
   // private final Autonomous m_autonomousCommand = new Autonomous();
   private final ArcadeDrive m_autoCommand;
-  final JoystickButton stephenModeButton = new JoystickButton(driverJoystick, 8);
+
+  private SendableChooser<Command> m_chooser = new SendableChooser<>();
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -84,7 +87,7 @@ public class RobotContainer {
     powerCellSystem = new PowercellSystem();
 
     ArcadeDrive arcadeDrive = new ArcadeDrive(() -> driverJoystick.getRawAxis(1) * -1,
-        () -> driverJoystick.getRawAxis(3) - driverJoystick.getRawAxis(2), () -> stephenModeButton.get(), drivetrain);
+        () -> driverJoystick.getRawAxis(3) - driverJoystick.getRawAxis(2), () ->  false, drivetrain);
     drivetrain.setDefaultCommand(arcadeDrive);
     // controlPanel.setDefaultCommand(new
     // ControlPanelColorVisionTracking(controlPanel));
@@ -96,19 +99,22 @@ public class RobotContainer {
     // ControlPanelColorVisionTracking(controlPanel));
 
     // Show what command your subsystem is running on the SmartDashboard
-    SmartDashboard.putData(powerCellSystem);
-    SmartDashboard.putData(drivetrain);
+    // SmartDashboard.putData(powerCellSystem);
+    // SmartDashboard.putData(drivetrain);
     // SmartDashboard.putData(controlPanel);
     SmartDashboard.putData(new ResetOdometry(drivetrain));
-    SmartDashboard.putData(new DriveForward(drivetrain, 2));
-    SmartDashboard.putData(new RotateDrive(drivetrain, 90));
+    Shuffleboard.getTab("Autonomous").add(new AutoDriveForward(drivetrain, 2, 0.5));
+    Shuffleboard.getTab("Autonomous").add(new RotateDrive(drivetrain, 90));
     // SmartDashboard.putData(new AutoTest1(drivetrain));
-    SmartDashboard.putData(new AutoPathFinderTest(drivetrain));
+    Shuffleboard.getTab("Autonomous").add("Drive Forward", new AutoPathFinder(drivetrain, "DriveForward"));
     // SmartDashboard.putData(new AutoManualTest(drivetrain));
-    SmartDashboard.putData(new RaiseConveyerDashboard(powerCellSystem));
-    SmartDashboard.putData(new LowerConveyerDashboard(powerCellSystem));
+    Shuffleboard.getTab("Autonomous").add(new RaiseConveyerDashboard(powerCellSystem));
+    Shuffleboard.getTab("Autonomous").add(new LowerConveyerDashboard(powerCellSystem));
     SmartDashboard.putData(new StoreArm(powerCellSystem));
-    SmartDashboard.putData(new DeployArm(powerCellSystem));
+    Shuffleboard.getTab("Autonomous").add(new DeployArm(powerCellSystem));
+    Shuffleboard.getTab("Autonomous").add(new AutoScoreInFront(drivetrain, powerCellSystem));
+    Shuffleboard.getTab("Autonomous").add("DriveForwardUntilCollission", new DriveUntilCollission(drivetrain, false, 2));
+    Shuffleboard.getTab("Autonomous").add("DriveReverseUntilCollission", new DriveUntilCollission(drivetrain, true, 2));
     // Call log method on all subsystems
     m_autoCommand = new ArcadeDrive(null, null, null, drivetrain);
 
@@ -120,6 +126,14 @@ public class RobotContainer {
     usbCamera.setVideoMode(PixelFormat.kMJPEG, 320, 240, 30);
 
     powerCellSystem.setArmUp(true);
+
+    m_chooser.setDefaultOption("Score in Front", new AutoScoreInFront(drivetrain, powerCellSystem));
+    m_chooser.addOption("Drive Forward Until Collission", new DriveUntilCollission(drivetrain, false, 3));
+    m_chooser.addOption("Drive Reverse Until Collission", new DriveUntilCollission(drivetrain, true, 3));
+
+    // Put the chooser on the dashboard
+    Shuffleboard.getTab("Autonomous").add(m_chooser);
+
   }
 
   /**
@@ -178,8 +192,8 @@ public class RobotContainer {
   }
 
   public void teleopDisable(){
-    if(climber.isExtraLiftEngaged())
-      climber.DisengageExtraLift();
+    // if(climber.isExtraLiftEngaged())
+    //   climber.DisengageExtraLift();
   }
 
   /**
@@ -187,8 +201,8 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
-    return new AutoManualTest(drivetrain);
+  public Command getAutonomousCommand() {    
+    return m_chooser.getSelected();
   }
 
 }

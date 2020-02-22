@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.SpeedController;
@@ -17,6 +18,7 @@ import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -30,35 +32,79 @@ import frc.robot.Constants;
 public class DriveTrain extends SubsystemBase {
   private final SpeedController leftMotorGroup;
   private final SpeedController rightMotorGroup;
+
+  private final WPI_VictorSPX leftFrontMotor;
+  private final WPI_VictorSPX leftRearMotor;
+  private final WPI_VictorSPX rightFrontMotor;
+  private final WPI_VictorSPX rightRearMotor;
   private final DifferentialDrive drive;
   private final Encoder leftEncoder;
   private final Encoder rightEncoder;
   private final AHRS navx;
   private final DifferentialDriveOdometry odometry;
 
-  
   public DriveTrain() {
 
-    leftMotorGroup = new SpeedControllerGroup(
-      new WPI_VictorSPX(Constants.CANID_FrontLeftDriveMotor), 
-      new WPI_VictorSPX(Constants.CANID_RearLeftDriveMotor));
-   rightMotorGroup = new SpeedControllerGroup(
-      new WPI_VictorSPX(Constants.CANID_FrontRightDriveMotor), 
-      new WPI_VictorSPX(Constants.CANID_RearRightDriveMotor));
-   drive = new DifferentialDrive(leftMotorGroup, rightMotorGroup);
+    leftFrontMotor = new WPI_VictorSPX(Constants.CANID_FrontLeftDriveMotor);
+    leftFrontMotor.setNeutralMode(NeutralMode.Brake);
+    leftRearMotor = new WPI_VictorSPX(Constants.CANID_RearLeftDriveMotor);
+    leftRearMotor.setNeutralMode(NeutralMode.Brake);
+
+    rightFrontMotor = new WPI_VictorSPX(Constants.CANID_FrontRightDriveMotor);
+    rightFrontMotor.setNeutralMode(NeutralMode.Brake);
+    rightRearMotor = new WPI_VictorSPX(Constants.CANID_RearRightDriveMotor);
+    rightRearMotor.setNeutralMode(NeutralMode.Brake);
+
+    leftMotorGroup = new SpeedControllerGroup(leftFrontMotor, leftRearMotor);
+    rightMotorGroup = new SpeedControllerGroup(rightFrontMotor, rightRearMotor);
+    drive = new DifferentialDrive(leftMotorGroup, rightMotorGroup);
     // AHRS ahrs = new AHRS(SerialPort.Port.kMXP); /* Alternatives: SPI.Port.kMXP,
     // I2C.Port.kMXP or SerialPort.Port.kUSB */
     navx = new AHRS(SPI.Port.kMXP);
     leftEncoder = new Encoder(Constants.leftEncoderA, Constants.leftEncoderB);
     rightEncoder = new Encoder(Constants.rightEncoderA, Constants.rightEncoderB);
     leftEncoder.setDistancePerPulse(Constants.EncoderDistancePerPulse);
-    leftEncoder.setReverseDirection(true);    
+    leftEncoder.setReverseDirection(true);
     rightEncoder.setDistancePerPulse(Constants.EncoderDistancePerPulse);
     resetEncoders();
-    odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getHeading()));
+        odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getHeading()));
 
+
+        Shuffleboard.getTab("Stats").addNumber("Pitch", () -> navx.getPitch());
+    Shuffleboard.getTab("Stats").addNumber("Roll", () -> navx.getRoll());
+    Shuffleboard.getTab("Stats").addNumber("Drive Left Encoder", () -> leftEncoder.get());
+    Shuffleboard.getTab("Stats").addNumber("Drive Right Encoder", () -> rightEncoder.get());
+    Shuffleboard.getTab("Stats").addNumber("Drive Left Encoder Dist", () -> leftEncoder.getDistance());
+    Shuffleboard.getTab("Stats").addNumber("Drive Right Encoder Dist", () -> rightEncoder.getDistance());
     
+    Shuffleboard.getTab("Stats").addNumber("Last Speed", () -> lastSpeed);
+    Shuffleboard.getTab("Stats").addNumber("Last Rotation", () -> lastRotation);
   }
+
+  double last_world_linear_accel_x;
+  double last_world_linear_accel_y;
+
+  final double kCollisionThreshold_DeltaG = 0.5f;
+
+  public boolean collisionDetected() {
+    boolean collisionDetected = false;
+
+    double curr_world_linear_accel_x = navx.getWorldLinearAccelX();
+    double currentJerkX = curr_world_linear_accel_x - last_world_linear_accel_x;
+    last_world_linear_accel_x = curr_world_linear_accel_x;
+    double curr_world_linear_accel_y = navx.getWorldLinearAccelY();
+    double currentJerkY = curr_world_linear_accel_y - last_world_linear_accel_y;
+    last_world_linear_accel_y = curr_world_linear_accel_y;
+
+    if ((Math.abs(currentJerkX) > kCollisionThreshold_DeltaG)
+        || (Math.abs(currentJerkY) > kCollisionThreshold_DeltaG)) {
+      collisionDetected = true;
+    }
+    SmartDashboard.putBoolean("CollisionDetected", collisionDetected);
+
+    return collisionDetected;
+  }
+
   public void setMaxOutput(double maxOutput) {
     drive.setMaxOutput(maxOutput);
   }
@@ -66,15 +112,17 @@ public class DriveTrain extends SubsystemBase {
   public Pose2d getPose() {
     return odometry.getPoseMeters();
   }
+
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
     return new DifferentialDriveWheelSpeeds(leftEncoder.getRate(), rightEncoder.getRate());
   }
 
-  public void resetOdometry(){
+  public void resetOdometry() {
     navx.reset();
     Pose2d zeroPose = new Pose2d(0, 0, new Rotation2d());
     resetOdometry(zeroPose);
   }
+
   public void resetOdometry(Pose2d pose) {
     resetEncoders();
     odometry.resetPosition(pose, Rotation2d.fromDegrees(getHeading()));
@@ -85,9 +133,11 @@ public class DriveTrain extends SubsystemBase {
     rightMotorGroup.setVoltage(-rightVolts);
     drive.feed();
   }
+
   public double getAverageEncoderDistance() {
     return (leftEncoder.getDistance() + rightEncoder.getDistance()) / 2.0;
   }
+
   public void zeroHeading() {
     navx.reset();
   }
@@ -113,29 +163,25 @@ public class DriveTrain extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    odometry.update(Rotation2d.fromDegrees(getHeading()), leftEncoder.getDistance(),
-    rightEncoder.getDistance());
+    odometry.update(Rotation2d.fromDegrees(getHeading()), leftEncoder.getDistance(), rightEncoder.getDistance());
     boolean motionDetected = navx.isMoving();
     SmartDashboard.putNumber("Rotation", navx.getAngle());
-    SmartDashboard.putBoolean("MotionDetected", motionDetected);
-    SmartDashboard.putNumber("Pitch", navx.getPitch());
-    SmartDashboard.putNumber("Roll", navx.getRoll());
-    SmartDashboard.putNumber("LeftEncoder", leftEncoder.get());
-    SmartDashboard.putNumber("RightEncoder", rightEncoder.get());
-    SmartDashboard.putNumber("LeftEncoderDistance", leftEncoder.getDistance());
-    SmartDashboard.putNumber("RightEncoderDistance", rightEncoder.getDistance());
+    SmartDashboard.putBoolean("Motion Detected", motionDetected);
   }
 
+  private double lastSpeed = 0;
+  private double lastRotation = 0;
+
   public void drive(double xSpeed, double zRotation) {
+    lastSpeed = xSpeed;
+    lastRotation = zRotation;
     drive.arcadeDrive(xSpeed, zRotation);
-    SmartDashboard.putNumber("xSpeed", xSpeed);
-    SmartDashboard.putNumber("zRotation", zRotation);
   }
 
   // public void drive(double leftSpeed, double rightSpeed) {
-  //   drive.tankDrive(leftSpeed,rightSpeed);
-  //   SmartDashboard.putNumber("rightSpeed", rightSpeed);
-  //   SmartDashboard.putNumber("leftSpeed", leftSpeed);
+  // drive.tankDrive(leftSpeed,rightSpeed);
+  // SmartDashboard.putNumber("rightSpeed", rightSpeed);
+  // SmartDashboard.putNumber("leftSpeed", leftSpeed);
 
   // }
 
@@ -143,16 +189,17 @@ public class DriveTrain extends SubsystemBase {
     return navx.getAngle();
   }
 
-  public double rightEncoderDistance(){
+  public double rightEncoderDistance() {
     return rightEncoder.getDistance();
   }
 
-  public double leftEncoderDistance(){
+  public double leftEncoderDistance() {
     return leftEncoder.getDistance();
   }
-  private void resetEncoders(){
+
+  private void resetEncoders() {
     leftEncoder.reset();
-    rightEncoder.reset();    
+    rightEncoder.reset();
   }
 
   public void log() {
