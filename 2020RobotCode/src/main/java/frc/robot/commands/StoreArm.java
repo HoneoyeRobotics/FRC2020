@@ -32,7 +32,7 @@ public class StoreArm extends CommandBase {
   @Override
   public void execute() {
     SmartDashboard.putNumber("StoreArm Timer", timer.get());
-    if(timer.get() > 5){
+    if(timer.get() > 3){
       powercellSystem.RaiseConveyer();
     }
   }
@@ -48,6 +48,6 @@ public class StoreArm extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.get() > 6;
+    return timer.get() > 4;
   }
 }

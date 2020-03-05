@@ -23,21 +23,10 @@ public class ArcadeDrive extends CommandBase {
   private final DoubleSupplier m_xSpeed;
   private final DoubleSupplier m_zRotation;
 
-  private final BooleanSupplier m_stephenMode;
-
-  private boolean stephenMode = false;
-  private boolean stephenModePressed = false;
-
-  /**
-   * Creates a new ExampleCommand.
-   *
-   * @param subsystem The subsystem used by this command.
-   */
-  public ArcadeDrive(DoubleSupplier xSpeed, DoubleSupplier zRotation, BooleanSupplier stephenMode, DriveTrain drivetrain) {
+  public ArcadeDrive(DoubleSupplier xSpeed, DoubleSupplier zRotation, DriveTrain drivetrain) {
     m_drivetrain = drivetrain;
     m_xSpeed = xSpeed;
     m_zRotation = zRotation;
-    m_stephenMode = stephenMode;
     addRequirements(m_drivetrain);
   }
 
@@ -45,16 +34,6 @@ public class ArcadeDrive extends CommandBase {
 @Override
 public void execute() {
   m_drivetrain.drive(m_xSpeed.getAsDouble(), m_zRotation.getAsDouble() * 0.75);
-  //is not pressed, and button pressed
-  if(stephenModePressed == false && m_stephenMode.getAsBoolean())
-  {
-    stephenModePressed = true;
-    stephenMode = !stephenMode;
-    SmartDashboard.putBoolean("StephenMode", stephenMode);
-  }
-  else if(stephenModePressed == m_stephenMode.getAsBoolean() == false){
-    stephenModePressed = false;
-  }
 
 }
 

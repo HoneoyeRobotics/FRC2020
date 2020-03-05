@@ -57,84 +57,52 @@ import frc.robot.subsystems.*;
  * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  // private final ControlPanel controlPanel;
   private final DriveTrain drivetrain;
   private final Climber climber;
+  private final Camera camera;
   private final PowercellSystem powerCellSystem;
-  // private final Joystick leftDriverJoystick = new Joystick(0);
-  // private final Joystick rightDriverJoystick = new Joystick(1);
   private final Joystick driverJoystick = new Joystick(0);
-  private final Joystick coPilotjoystick = new Joystick(2);
-  private final UsbCamera usbCamera;
-
-  // private final JoystickButton m_RunControlPanelArmWheel = new
-  // JoystickButton(coPilotjoystick, 0); // button A, check button id
-  // private final Autonomous m_autonomousCommand = new Autonomous();
-  private final ArcadeDrive m_autoCommand;
-
+  private final Joystick coDriverjoystick = new Joystick(1);
   private SendableChooser<Command> m_chooser = new SendableChooser<>();
 
-  /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
-   */
   public RobotContainer() {
 
     // construct subsystems
+    camera = new Camera();
     drivetrain = new DriveTrain();
     climber = new Climber();
-    // controlPanel = new ControlPanel();u
     powerCellSystem = new PowercellSystem();
-
-    ArcadeDrive arcadeDrive = new ArcadeDrive(() -> driverJoystick.getRawAxis(1) * -1,
-        () -> driverJoystick.getRawAxis(3) - driverJoystick.getRawAxis(2), () ->  false, drivetrain);
+    // default commands
+    ArcadeDrive arcadeDrive = new ArcadeDrive(() -> driverJoystick.getRawAxis(1) * (drivetrain.isReversed() ? 1 : -1),
+        () -> driverJoystick.getRawAxis(3) - driverJoystick.getRawAxis(2), drivetrain);
     drivetrain.setDefaultCommand(arcadeDrive);
-    // controlPanel.setDefaultCommand(new
-    // ControlPanelColorVisionTracking(controlPanel));
-
-    // drivetrain.setDefaultCommand(new TankDrive(() ->
-    // leftDriverJoystick.getRawAxis(1) * -1,
-    // () -> rightDriverJoystick.getRawAxis(1) * -1, drivetrain));
-    // controlPanel.setDefaultCommand(new
-    // ControlPanelColorVisionTracking(controlPanel));
-
-    // Show what command your subsystem is running on the SmartDashboard
-    // SmartDashboard.putData(powerCellSystem);
-    // SmartDashboard.putData(drivetrain);
-    // SmartDashboard.putData(controlPanel);
-    SmartDashboard.putData(new ResetOdometry(drivetrain));
-    Shuffleboard.getTab("Autonomous").add(new AutoDriveForward(drivetrain, 2, 0.5));
-    Shuffleboard.getTab("Autonomous").add(new RotateDrive(drivetrain, 90));
-    // SmartDashboard.putData(new AutoTest1(drivetrain));
-    Shuffleboard.getTab("Autonomous").add("Drive Forward", new AutoPathFinder(drivetrain, "DriveForward"));
-    // SmartDashboard.putData(new AutoManualTest(drivetrain));
-    Shuffleboard.getTab("Autonomous").add(new RaiseConveyerDashboard(powerCellSystem));
-    Shuffleboard.getTab("Autonomous").add(new LowerConveyerDashboard(powerCellSystem));
-    SmartDashboard.putData(new StoreArm(powerCellSystem));
-    Shuffleboard.getTab("Autonomous").add(new DeployArm(powerCellSystem));
-    Shuffleboard.getTab("Autonomous").add(new AutoScoreInFront(drivetrain, powerCellSystem));
-    Shuffleboard.getTab("Autonomous").add("DriveForwardUntilCollission", new DriveUntilCollission(drivetrain, false, 2));
-    Shuffleboard.getTab("Autonomous").add("DriveReverseUntilCollission", new DriveUntilCollission(drivetrain, true, 2));
-    // Call log method on all subsystems
-    m_autoCommand = new ArcadeDrive(null, null, null, drivetrain);
 
     // Configure the button bindings
-    configurePilotButtonBindings();
+    configureCoDriverButtonBindings();
     configureDriverButtonBindings();
-
-    usbCamera = CameraServer.getInstance().startAutomaticCapture();
-    usbCamera.setVideoMode(PixelFormat.kMJPEG, 320, 240, 30);
 
     powerCellSystem.setArmUp(true);
 
+    // dashboard stuff
+    Shuffleboard.getTab("Main").add(new ResetOdometry(drivetrain));
+    
+    Shuffleboard.getTab("Main").add(drivetrain);
+    Shuffleboard.getTab("Commands").add(new StoreArm(powerCellSystem));
+    Shuffleboard.getTab("Commands").add(new RaiseConveyer(powerCellSystem));
+    Shuffleboard.getTab("Commands").add(new LowerConveyer(powerCellSystem));
+    Shuffleboard.getTab("Commands").add(new DeployArm(powerCellSystem));
+    Shuffleboard.getTab("Commands").add("ADF", new AutoDriveForward(drivetrain, -36, -0.75).withTimeout(6));
+
+    // setup autonomous commands
     m_chooser.setDefaultOption("Score in Front", new AutoScoreInFront(drivetrain, powerCellSystem));
-    m_chooser.addOption("Drive Forward Until Collission", new DriveUntilCollission(drivetrain, false, 3));
-    m_chooser.addOption("Drive Reverse Until Collission", new DriveUntilCollission(drivetrain, true, 3));
+    m_chooser.addOption("Score from Left", new AutoScoreFromLeftSide(drivetrain, powerCellSystem));
+    m_chooser.addOption("Score from Right", new AutoScoreFromRightSide(drivetrain, powerCellSystem));
+    m_chooser.addOption("Drive past Base line", new AutoDrivePastBaseLine(drivetrain));
 
     // Put the chooser on the dashboard
-    Shuffleboard.getTab("Autonomous").add(m_chooser);
+    Shuffleboard.getTab("Commands").add(m_chooser);
 
-  }
+    }
 
   /**
    * Use this method to define your button->command mappings. Buttons can be
@@ -142,66 +110,42 @@ public class RobotContainer {
    * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configurePilotButtonBindings() {
-    // buttons for pilot joystick
-    // final JoystickButton aButton = new JoystickButton(coPilotjoystick, 1);
-    // final JoystickButton bButton = new JoystickButton(coPilotjoystick, 2);
-    // final JoystickButton xButton = new JoystickButton(coPilotjoystick, 3);
-    // final JoystickButton yButton = new JoystickButton(coPilotjoystick, 4);
-    final JoystickButton leftBumper = new JoystickButton(coPilotjoystick, 5);
-    final JoystickButton rightBumper = new JoystickButton(coPilotjoystick, 6);
-    final JoystickButton backButton = new JoystickButton(coPilotjoystick, 7);
-    final JoystickButton startButton = new JoystickButton(coPilotjoystick, 8);
+  private void configureCoDriverButtonBindings() {
+    // buttons for codriver joystick
+    final JoystickButton leftBumper = new JoystickButton(coDriverjoystick, 5);
+    final JoystickButton rightBumper = new JoystickButton(coDriverjoystick, 6);
+    final JoystickButton backButton = new JoystickButton(coDriverjoystick, 7);
+    final JoystickButton startButton = new JoystickButton(coDriverjoystick, 8);
 
     // Connect the buttons to commands
-    //leftBumper.whileHeld(new GatherPowerCellsAfterDeployArm(powerCellSystem));
     leftBumper.whileHeld(new GatherPowercells(powerCellSystem));
     rightBumper.whileHeld(new DepositPowercells(powerCellSystem));
-    // aButton.toggleWhenPressed(new RunControlPanelArmWheel(controlPanel, () ->
-    // false, () -> false));
-    // leftBumper.whileHeld(new ExtendControlPanelArm(controlPanel));
-    // rightBumper.whileHeld(new RetractControlPanelArm(controlPanel));
     startButton.whileHeld(new ElevateClimber(climber));
     backButton.whileHeld(new RetractClimber(climber));
   }
 
   private void configureDriverButtonBindings() {
     // bubttons being used on controller
-      final JoystickButton aButton = new JoystickButton(driverJoystick, 1);
-      final JoystickButton bButton = new JoystickButton(driverJoystick, 2);
-      // final JoystickButton leftBumper = new JoystickButton(driverJoystick, 5);
-      // final JoystickButton rightBumper = new JoystickButton(driverJoystick, 6);
-      // final JoystickButton backButton = new JoystickButton(driverJoystick, 7);
-      // final JoystickButton startButton = new JoystickButton(driverJoystick, 8);
-
+    final JoystickButton aButton = new JoystickButton(driverJoystick, 1);
+    final JoystickButton bButton = new JoystickButton(driverJoystick, 2);
+    final JoystickButton xButton = new JoystickButton(driverJoystick, 3);
+    xButton.whenPressed(new SwitchDriveAndCamera(drivetrain, camera));
 
     // buttons assigned to commands
-      aButton.whileHeld(new EngageExtraLift(climber));
-      bButton.whileHeld(new DisengageExtraLift(climber));
-      // leftBumper.whileHeld(new GatherPowercells(powerCellSystem));
-      // rightBumper.whileHeld(new DepositPowercells(powerCellSystem));
-      // startButton.whileHeld(new ElevateClimber(climber));
-      // backButton.whileHeld(new RetractClimber(climber));
+    aButton.whileHeld(new EngageExtraLift(climber));
+    bButton.whileHeld(new DisengageExtraLift(climber));
   }
 
   public void teleopInit() {
-
     // ConveyerPistonInitilize ConveyerPistonInitilize = new
     // ConveyerPistonInitilize(powerCellSystem);
     // ConveyerPistonInitilize.withTimeout(0.2).schedule(true);
   }
 
-  public void teleopDisable(){
-    // if(climber.isExtraLiftEngaged())
-    //   climber.DisengageExtraLift();
+  public void teleopDisable() {
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {    
+  public Command getAutonomousCommand() {
     return m_chooser.getSelected();
   }
 

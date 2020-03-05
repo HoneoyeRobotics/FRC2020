@@ -7,36 +7,39 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.PowercellSystem;
 
-public class ReleaseArm extends CommandBase {
-  private final Subsystem powercellSystem;
-
-  public ReleaseArm(Subsystem powercellSystem) {
-    // Use addRequirements() here to declare subsystem dependencies.
+public class RaiseConveyer extends CommandBase {
+  private final PowercellSystem powercellSystem;
+  public RaiseConveyer(PowercellSystem powercellSystem) {
     this.powercellSystem = powercellSystem;
+    addRequirements(powercellSystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    powercellSystem.RaiseConveyer();
+    numTicks=0;
   }
-
+  private int numTicks =0;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    numTicks++;
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    powercellSystem.HoldConveyer();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return numTicks > 5;
   }
 }

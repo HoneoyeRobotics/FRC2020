@@ -7,20 +7,25 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.subsystems.DriveTrain;
-import frc.robot.commands.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.subsystems.Camera;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class AutoDrivePastBaseLine extends SequentialCommandGroup {
-  /**
-   * Creates a new AutoScoreInFront.
-   */
-  public AutoDrivePastBaseLine(DriveTrain drivetrain) {
-    // Add your commands in the super() call, e.g.
-    // super(new FooCommand(), new BarCommand());
-    super(new DriveUntilCollission(drivetrain, false, 1).withTimeout(2));
+public class SwitchCamera extends InstantCommand {
+  private final Camera camera;
+  public SwitchCamera(Camera camera) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    this.camera =  camera;
+    addRequirements(camera);
+  }
+
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {
+    camera.SwitchCamera();
+    
   }
 }

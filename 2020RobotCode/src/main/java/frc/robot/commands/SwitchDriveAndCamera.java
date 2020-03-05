@@ -8,19 +8,20 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class AutoDrivePastBaseLine extends SequentialCommandGroup {
+public class SwitchDriveAndCamera extends SequentialCommandGroup {
   /**
-   * Creates a new AutoScoreInFront.
+   * Creates a new ReverseDriveAndCamera.
    */
-  public AutoDrivePastBaseLine(DriveTrain drivetrain) {
+  public SwitchDriveAndCamera(DriveTrain driveTrain, Camera camera) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super(new DriveUntilCollission(drivetrain, false, 1).withTimeout(2));
+    super(new SwitchDrive(driveTrain), new SwitchCamera(camera));
+
   }
 }

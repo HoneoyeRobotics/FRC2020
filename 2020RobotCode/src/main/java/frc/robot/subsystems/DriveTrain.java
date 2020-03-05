@@ -42,8 +42,10 @@ public class DriveTrain extends SubsystemBase {
   private final Encoder rightEncoder;
   private final AHRS navx;
   private final DifferentialDriveOdometry odometry;
+  private boolean reverseDirection=   false;
 
   public DriveTrain() {
+
 
     leftFrontMotor = new WPI_VictorSPX(Constants.CANID_FrontLeftDriveMotor);
     leftFrontMotor.setNeutralMode(NeutralMode.Brake);
@@ -54,7 +56,15 @@ public class DriveTrain extends SubsystemBase {
     rightFrontMotor.setNeutralMode(NeutralMode.Brake);
     rightRearMotor = new WPI_VictorSPX(Constants.CANID_RearRightDriveMotor);
     rightRearMotor.setNeutralMode(NeutralMode.Brake);
-
+   
+    if(Constants.RampWaitMode > 0) {
+      leftFrontMotor.configOpenloopRamp(Constants.RampWaitMode);
+      leftRearMotor.configOpenloopRamp(Constants.RampWaitMode);
+      rightRearMotor.configOpenloopRamp(Constants.RampWaitMode);
+      rightFrontMotor.configOpenloopRamp(Constants.RampWaitMode);
+   
+    }
+    
     leftMotorGroup = new SpeedControllerGroup(leftFrontMotor, leftRearMotor);
     rightMotorGroup = new SpeedControllerGroup(rightFrontMotor, rightRearMotor);
     drive = new DifferentialDrive(leftMotorGroup, rightMotorGroup);
@@ -205,5 +215,14 @@ public class DriveTrain extends SubsystemBase {
   public void log() {
     // pee pee poo poo why are you reading this
     // did you know that cameras have a limited fov
+  }
+
+
+  public void switchDriveDirection(){
+    this.reverseDirection = !reverseDirection;
+  }
+
+  public boolean isReversed(){
+    return reverseDirection;
   }
 }

@@ -40,11 +40,18 @@ public class AutoDriveForward extends CommandBase {
   public void initialize() {
     startEncoder = m_drivetrain.leftEncoderDistance();
     endEncoder = startEncoder + distance;
+    kAngleSetpoint = m_drivetrain.getAngle();
   }
 
+  private double kAngleSetpoint = 0;
+  private double  kP = 0.05;
   @Override
   public void execute() {
-    m_drivetrain.drive(speed, 0);
+
+    double turningValue = (kAngleSetpoint - m_drivetrain.getAngle()) * kP;
+    // Invert the direction of the turn if we are going backwards
+    turningValue = Math.copySign(turningValue, speed);
+    m_drivetrain.drive(speed, turningValue);
   }
 
   // Make this return true when this Command no longer needs to run execute()
