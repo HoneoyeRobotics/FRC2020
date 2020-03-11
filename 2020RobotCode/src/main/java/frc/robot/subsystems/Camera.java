@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Camera extends SubsystemBase {
-  private UsbCamera frontCamera;
+	private UsbCamera frontCamera;
 	private UsbCamera rearCamera;
 	private CvSink frontCameraCvSink;
 	private CvSink rearCameraCvSink;
@@ -24,37 +24,32 @@ public class Camera extends SubsystemBase {
 
 	public Camera() {
 		frontCamera = CameraServer.getInstance().startAutomaticCapture(0);
-     rearCamera = CameraServer.getInstance().startAutomaticCapture(1);     
+		rearCamera = CameraServer.getInstance().startAutomaticCapture(1);
 		frontCameraCvSink = new CvSink("cam1cv");
-    frontCameraCvSink.setSource(frontCamera);    
-		frontCameraCvSink.setEnabled(true);		
-		
+		frontCameraCvSink.setSource(frontCamera);
+		frontCameraCvSink.setEnabled(true);
+
 		rearCameraCvSink = new CvSink("cam2cv");
 		rearCameraCvSink.setSource(rearCamera);
-    rearCameraCvSink.setEnabled(true);    
-    SmartDashboard.putBoolean("UseFrontCamera", UseFrontCamera);
+		rearCameraCvSink.setEnabled(true);
+		SmartDashboard.putBoolean("UseFrontCamera", UseFrontCamera);
 	}
-	
-	
-	public void SwitchCamera()
-	{
-    
-		if(UseFrontCamera == true) {
-			UseFrontCamera = false;
-      CameraServer.getInstance().getServer().setSource(rearCamera);			      
-      SmartDashboard.putBoolean("UseFrontCamera", UseFrontCamera);
-		}
-		else
-		{
-			UseFrontCamera = true;
-      CameraServer.getInstance().getServer().setSource(frontCamera);			
-      SmartDashboard.putBoolean("UseFrontCamera", UseFrontCamera);
-		}
-	}
-	
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
+	public void SwitchCamera() {
+
+		if (UseFrontCamera == true) {
+			UseFrontCamera = false;
+			CameraServer.getInstance().getServer().setSource(rearCamera);
+			SmartDashboard.putBoolean("UseFrontCamera", UseFrontCamera);
+		} else {
+			UseFrontCamera = true;
+			CameraServer.getInstance().getServer().setSource(frontCamera);
+			SmartDashboard.putBoolean("UseFrontCamera", UseFrontCamera);
+		}
+	}
+
+	@Override
+	public void periodic() {
+		// This method will be called once per scheduler run
+	}
 }

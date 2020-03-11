@@ -7,43 +7,41 @@
 
 package frc.robot;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.List;
-
-import edu.wpi.cscore.UsbCamera;
-import edu.wpi.cscore.VideoMode.PixelFormat;
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Filesystem;
-
-//import java.util.ResourceBundle.Control;
-
-//import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
-
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Preferences;
-import edu.wpi.first.wpilibj.Sendable;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.controller.*;
-import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.trajectory.Trajectory;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
-//import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj2.command.Command;
+
+// import java.io.IOException;
+// import java.nio.file.Path;
+// import java.util.List;
+// import edu.wpi.cscore.UsbCamera;
+// import edu.wpi.cscore.VideoMode.PixelFormat;
+// import edu.wpi.first.cameraserver.CameraServer;
+// import edu.wpi.first.wpilibj.DriverStation;
+// import edu.wpi.first.wpilibj.Filesystem;
+// import edu.wpi.first.wpilibj.Preferences;
+// import edu.wpi.first.wpilibj.Sendable;
+// import edu.wpi.first.wpilibj.controller.*;
+// import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+// import edu.wpi.first.wpilibj.geometry.Pose2d;
+// import edu.wpi.first.wpilibj.geometry.Rotation2d;
+// import edu.wpi.first.wpilibj.geometry.Translation2d;
+// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// import edu.wpi.first.wpilibj.trajectory.Trajectory;
+// import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+// import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
+// import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
+// import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
+// import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+// import edu.wpi.first.wpilibj2.command.RamseteCommand;
+// import edu.wpi.first.wpilibj2.command.Subsystem;
+// import java.util.ResourceBundle.Control;
+// import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+
 
 //all command and subsystem imports
 import frc.robot.commands.*;
@@ -116,12 +114,14 @@ public class RobotContainer {
     final JoystickButton rightBumper = new JoystickButton(coDriverjoystick, 6);
     final JoystickButton backButton = new JoystickButton(coDriverjoystick, 7);
     final JoystickButton startButton = new JoystickButton(coDriverjoystick, 8);
+    final JoystickButton yButton = new JoystickButton(coDriverjoystick, 4);
 
     // Connect the buttons to commands
     leftBumper.whileHeld(new GatherPowercells(powerCellSystem));
     rightBumper.whileHeld(new DepositPowercells(powerCellSystem));
     startButton.whileHeld(new ElevateClimber(climber));
     backButton.whileHeld(new RetractClimber(climber));
+    yButton.whileHeld(new SpitPowercells(powerCellSystem));
   }
 
   private void configureDriverButtonBindings() {
