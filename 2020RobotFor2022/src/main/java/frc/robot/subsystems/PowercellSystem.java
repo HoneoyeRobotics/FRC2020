@@ -32,8 +32,8 @@ public class PowercellSystem extends SubsystemBase {
 
   public PowercellSystem() {
     //initializes compressor here
-    conveyorSolenoid = new DoubleSolenoid (PneumaticsModuleType.CTREPCM, Constants.PCMID_ConveyerSoleniodForward, Constants.PCMID_ConveyerSoleniodBackward);
-    Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
+    conveyorSolenoid = new DoubleSolenoid (Constants.CANID_PCM,  PneumaticsModuleType.CTREPCM, Constants.PCMID_ConveyerSoleniodForward, Constants.PCMID_ConveyerSoleniodBackward);
+    Compressor compressor = new Compressor(Constants.CANID_PCM, PneumaticsModuleType.CTREPCM);
     pressureReader = new AnalogInput(0);
     // PneumaticsControlModule module = new PneumaticsControlModule();
     // module.comp
