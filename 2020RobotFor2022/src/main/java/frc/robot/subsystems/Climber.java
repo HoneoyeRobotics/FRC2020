@@ -22,8 +22,8 @@ public class Climber extends SubsystemBase {
   public Climber() {
     //initialize all motors here
     
-    elevatorSolenoid = new DoubleSolenoid (PneumaticsModuleType.CTREPCM, Constants.PCMID_ScissorLiftForward, Constants.PCMID_ScissorLiftBackward);
-    extraLiftSolenoid = new DoubleSolenoid (PneumaticsModuleType.CTREPCM, Constants.PCMID_ExtraLiftEngaged, Constants.PCMID_ExtraLiftDisengaged);
+    elevatorSolenoid = new DoubleSolenoid (Constants.CANID_PCM, $PneumaticsModuleType.CTREPCM, Constants.PCMID_ScissorLiftForward, Constants.PCMID_ScissorLiftBackward);
+    extraLiftSolenoid = new DoubleSolenoid (Constants.CANID_PCM, PneumaticsModuleType.CTREPCM, Constants.PCMID_ExtraLiftEngaged, Constants.PCMID_ExtraLiftDisengaged);
   }
 
   public boolean isExtraLiftEngaged(){
