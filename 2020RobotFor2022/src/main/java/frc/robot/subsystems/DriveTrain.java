@@ -67,6 +67,7 @@ public class DriveTrain extends SubsystemBase {
     
     leftMotorGroup = new SpeedControllerGroup(leftFrontMotor, leftRearMotor);
     rightMotorGroup = new SpeedControllerGroup(rightFrontMotor, rightRearMotor);
+    rightMotorGroup.setInverted(true);
     drive = new DifferentialDrive(leftMotorGroup, rightMotorGroup);
     // AHRS ahrs = new AHRS(SerialPort.Port.kMXP); /* Alternatives: SPI.Port.kMXP,
     // I2C.Port.kMXP or SerialPort.Port.kUSB */
